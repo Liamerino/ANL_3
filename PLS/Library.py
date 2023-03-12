@@ -29,3 +29,26 @@ class Library:
         else:
             print(f"[{bookItem}] is not a book and therefore it can't be deleted")
     
+    def search_book_by_title(self, title):
+        copies = 0
+        for b in self.bookItems:
+            if b.title == title:
+                copies += 1
+                book = b
+        if copies > 0:
+            print(f"There are {copies} copies of [{book}] in the library")
+            return b
+        else:
+            print(f"No books with title: {title} were found in the library")
+    
+    def search_book_by_ISBN(self, isbn):
+        copies = 0
+        for b in self.bookItems:
+            if b.ISBN == isbn:
+                copies += 1
+                book = b
+        if copies > 0:
+            print(f"There are {copies} copies of [{book}] in the library")
+            return b
+        else:
+            print(f"No books with ISBN: {isbn} were found in the library")
