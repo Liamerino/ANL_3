@@ -1,6 +1,7 @@
 from Catalog import Catalog
 from BookItem import BookItem
 from Book import Book
+
 class Library:
     def __init__(self):
         self.catalog = Catalog()

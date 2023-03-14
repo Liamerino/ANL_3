@@ -22,18 +22,21 @@ class Catalog:
 
     def remove_book(self, book):
         if not isinstance(book, Book):
-            print(f"[{book}] isnt a book therefore cant be removed from the catalog.")
+            return (False, f"[{book}] isnt a book therefore cant be removed from the catalog.")
         elif book not in self.books: 
-            print(f"[{book.title}] is not in the catalog")
+            return (False, f"[{book.title}] is not in the catalog")
         else:
-            print(f"[{book.title}] has been removed from the catalog")
             self.books.remove(book)
+            return (True, f"[{book.title}] has been removed from the catalog")
 
     def search_book_by_title(self,title):
         for b in self.books:
             if b.title == title:
                 return b
-    
+
+
+
+
     def edit_book(self, book):
         if not isinstance(book, Book):
             print(f"[{book}] isn't a book and therefore can't be edited")
