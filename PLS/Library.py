@@ -1,12 +1,15 @@
+from colorama import Fore
+from Settings import goBack, clear
 from Catalog import Catalog
 from BookItem import BookItem
 from Book import Book
+from Person import Person
 
 class Library:
     def __init__(self):
         self.catalog = Catalog()
-        self.members = []
-        self.bookItems = []
+        self.persons : list[Person] = []     #defining types does nothing at runtime, but while wrinting it helps with autocomplete
+        self.bookItems : list[BookItem] = []
     
     def addBookItem(self, *books):
         for book in books:
@@ -56,3 +59,30 @@ class Library:
             return b
         else:
             print(f"No books with ISBN: {isbn} were found in the library")
+
+    def run(self, message = f"{Fore.YELLOW}Log in"):
+        clear() #clearing console to make it better to shee where the i
+        print(f"{message}{Fore.RESET}")
+        print(f"====================")
+        print(f"Enter username:")
+        un = input().upper()
+        clear() #clearing console to make it better to shee where the i
+        print(f"{Fore.YELLOW}{un}{Fore.RESET}")
+        print(f"====================")
+        print(f"Enter password {Fore.BLACK}or nothing to change the username{Fore.RESET}:")
+        pw = input()
+
+        if pw == "" or un == "":
+            self.run()
+        for user in self.persons:
+            if user.username.upper() == un and user.password == pw:
+                user.start()
+                return
+        self.run(f"{Fore.RED}Wrong username or password")
+    
+    def add_person(self, *person):
+        for p in person:
+            if isinstance(p, Person):
+                self.persons.append(p)
+
+

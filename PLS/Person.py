@@ -1,11 +1,17 @@
-from Library import Library
+#from Library import Library
 from Settings import searchButton, goBack , nextButton, previousButton, clear
 from colorama import Fore
 
 class Person:
-    def __init__(self, name, library):
-        self.library : Library  = library #defining types does nothing at runtime, but while wrinting it helps to suggest words/functions
-        self.name = name
+    def __init__(self, library, username, password ):
+        self.library : Library  = library #defining types does nothing at runtime, but while wrinting it helps with autocomplete
+        self.username : str = username
+        self.password : str = password
+    
+    def __eq__(self, other): #default equals override
+        if isinstance(other, Person):
+            return self.username == other.username
+        return False
 
 
     #checkCatalog
@@ -60,7 +66,6 @@ class Person:
     #this start function is here for testing purposes
     #this will be deleted (or at least not used anymore) when we inherit the person as a User and/or Admin
     #then they will both have there own start method baked in 
-    
     def start(self, message = f"{Fore.YELLOW}Home Page"):
         clear()
         print(f"{message}{Fore.RESET}")
@@ -77,3 +82,4 @@ class Person:
             print(f"{Fore.GREEN}epic{Fore.RESET}, but Library command doesnt exist yet, thats a bummer")
         else:
             self.start(f"{Fore.RED}Invalid input, please try again.")
+

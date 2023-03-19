@@ -3,6 +3,7 @@ from Book import Book
 from Library import Library
 from BookItem import BookItem
 from Person import Person
+from Settings import clear
 
 def main():
     print("starting the program")
@@ -25,14 +26,19 @@ def main():
     MyAwesomeLibrary = Library()
     MyAwesomeLibrary.addBookItem(book1)
     MyAwesomeLibrary.addBookItem(book2, book3, book4, book6, book5, book7, book8, book9, book10, book11, book12)
+    clear()
     #MyAwesomeLibrary.addBookItem(book1)
     #MyAwesomeLibrary.addBookItem(1)
     #MyAwesomeLibrary.deleteBookItem(MyAwesomeLibrary.bookItems[0])
     #MyAwesomeLibrary.deleteBookItem(MyAwesomeLibrary.bookItems[3])
     #MyAwesomeLibrary.deleteBookItem(BookItem(book2))
 
-    MyEpicPerson = Person("epicPerson", MyAwesomeLibrary)
-    MyEpicPerson.start()
+    MyEpicPerson1 = Person(MyAwesomeLibrary, "epicPerson", "password123")
+    MyEpicPerson2 = Person(MyAwesomeLibrary, "superPerson", "password321")
+    MyAwesomeLibrary.add_person(MyEpicPerson1,MyEpicPerson2)
+    
+    print("list", MyAwesomeLibrary.persons)
+    #MyEpicPerson.start()
     
     #MyCoolCatalog = Catalog()
     #MyCoolCatalog.add_book(book1)
