@@ -8,17 +8,20 @@ class Library:
         self.members = []
         self.bookItems = []
     
-    def addBookItem(self, book):
-        if isinstance(book, Book):
-            bookToAdd = BookItem(book)
-            if bookToAdd not in self.bookItems:
-                self.bookItems.extend([bookToAdd] * 5)
-                print(f'Five copies of [{book}] have been added to the library')
+    def addBookItem(self, *books):
+        for book in books:
+            if isinstance(book, Book):
+                bookToAdd = BookItem(book)
+                if bookToAdd not in self.bookItems:
+                    self.bookItems.extend([bookToAdd] * 5)
+                    self.catalog.add_book(book)
+                    print(f'Five copies of [{book}] have been added to the library')
+                else:
+                    self.bookItems.append(bookToAdd)
+                    print(f'A copy of [{book}] has been added to the library')
             else:
-                self.bookItems.append(bookToAdd)
-                print(f'A copy of [{book}] has been added to the library')
-        else:
-            print(f"[{book}] is not a book and therefore can't be added")
+                print(f"[{book}] is not a book and therefore can't be added")
+        
 
     def deleteBookItem(self, bookItem):
         if isinstance(bookItem, BookItem):
