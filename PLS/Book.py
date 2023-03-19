@@ -1,3 +1,5 @@
+from Settings import colors
+
 class Book:
     def __init__(self, author, country, imageLink, language, link, pages, title, ISBN, year):
         self.author = author
@@ -17,7 +19,15 @@ class Book:
     
     def __str__(self): #default to string override
         return f"{self.title} - {self.author}"
-  
+    
+    def details(self):
+        print(f"{self.title} by{colors.WHITE} {self.author}")
+        print(f"====================")
+        print(f"{colors.GRAY}pages:{colors.WHITE} {self.pages}   {colors.GRAY}language:{colors.WHITE} {self.language}")
+        print(f"{colors.GRAY}publication country: {self.country}   publication year: {self.year} {colors.WHITE}")
+        print(f"{colors.GRAY}image source: {colors.CYAN}{self.imageLink} {colors.WHITE}")
+        print(f"{colors.GRAY}book source: {colors.BLUE}{self.link} {colors.WHITE}")
+        print(f"{colors.GRAY}ISBN: {colors.WHITE}{self.ISBN}")
 
 
 # the book varables examples taken from the json
