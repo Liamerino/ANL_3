@@ -6,12 +6,7 @@ class Catalog:
         self.books = []
 
     def add_book(self, book):
-        if not isinstance(book, Book):
-            print(f"[{book}] isnt a book therefore cant be added to the catalog.")
-        elif book in self.books:
-            print(f"[{book.title}] is already in the catalog")
-        else:
-            print(f"[{book.title}] has been added to the catalog")
+        if isinstance(book, Book):
             self.books.append(book)
     
     def show_books(self):
@@ -41,9 +36,6 @@ class Catalog:
                 ):
                 found.append(b)
         return found
-
-
-
 
 
     def edit_book(self, book):

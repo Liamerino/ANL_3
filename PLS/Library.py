@@ -4,6 +4,7 @@ from BookItem import BookItem
 from Book import Book
 from Person import Person
 import csv
+import json
 import os
 
 class Library:
@@ -12,9 +13,12 @@ class Library:
         self.members : list[Person] = []     #defining types does nothing at runtime, but while wrinting it helps with autocomplete
         self.bookItems : list[BookItem] = []
 
+    #####################################
+    # MEMBERS
+    #####################################
     def load_members(self, path):
         if not os.getcwd() in os.path.abspath(path):
-            print("that sucks, file not the correct directory")
+            print("cant load, file not the correct directory")
             return
         
         with open(path, 'r') as csv_file:
@@ -22,12 +26,12 @@ class Library:
             firstline = True
             for row in csv_reader:
                 if firstline:
-                    print(f'Column names are {", ".join(row)}')
+                    #print(f'Column names are {", ".join(row)}')
                     firstline = False
                 else:
-                   if len(row) != 10:
+                   if len(row) == 10:
                     self.add_member(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9])
-
+                    print(f"loading user:{row[0]} {row[7]}")
             print(f'loading users done.')
 
     def add_member(self, number, givenName, surname,streetAddress, zipCode, city, emailAddress, username, password, telephoneNumber ):
@@ -39,15 +43,32 @@ class Library:
         )
 
 
+
+
+
+
+
+    #####################################
+    # BOOKS
+    #####################################
+    def load_books(self, path):
+        with open(path, 'r') as f:
+            books = json.load(f)
+            for book in books:
+                bookToAdd = Book(book["author"], book["country"],book["imageLink"], book["language"], book["link"], book["pages"],book["title"],book["ISBN"], book["year"])
+                bookItemToAdd = BookItem(bookToAdd)
+                if bookToAdd not in self.bookItems:
+                    self.add_book_item(bookItemToAdd,bookItemToAdd,bookItemToAdd,bookItemToAdd,bookItemToAdd)
+                else:
+                    self.add_book_item(bookItemToAdd)
+
+                if bookToAdd not in self.catalog.books:
+                    self.catalog.add_book(bookToAdd)
+
     def add_book_item(self, *books):
         for book in books:
-            if isinstance(book, Book):
-                bookToAdd = BookItem(book)
-                if bookToAdd not in self.bookItems:
-                    self.bookItems.extend([bookToAdd] * 5)
-                    self.catalog.add_book(book)
-                else:
-                    self.bookItems.append(bookToAdd)
+            if isinstance(book, BookItem):
+                self.bookItems.append(book)
 
 
     def delete_book_item(self, bookItem):
