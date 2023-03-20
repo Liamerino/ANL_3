@@ -29,23 +29,19 @@ class Catalog:
             self.books.remove(book)
             return (True, f"[{book.title}] has been removed from the catalog")
 
-    #search book by: "author" || "title" || "isbn"
+    #search book by: "author" || "title" || "all"
     def search_books_by(self, by, term):
         sortBy = by.lower()
+        termLow = term.lower()
         found : list[Book] = [] #type declaration does not effect run time but helps while writing
-        for book in self.books:
-            if (sortBy == "title" and term.lower() in book.title.lower() 
-                or sortBy == "ibsn" and term  in book.ISBN
-                or sortBy == "author" and term.lower()  in book.author.lower() ):
-                found.append(book)
+        for b in self.books:
+            if (sortBy == "title" and termLow in b.title.lower() 
+                or sortBy == "author" and termLow in b.author.lower()
+                or sortBy == "all" and (termLow in b.author.lower() or termLow in b.title.lower())
+                ):
+                found.append(b)
         return found
 
-    """
-    def search_book_by_title(self,title):
-        for b in self.books:
-            if b.title == title:
-                return b
-    """
 
 
 

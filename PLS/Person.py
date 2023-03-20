@@ -2,15 +2,31 @@
 from Settings import buttons, colors, clear
 
 class Person:
-    def __init__(self, library, username, password ):
+    def __init__(self, library, number, givenName, surname,streetAddress, zipCode, city, emailAddress, username, password, telephoneNumber ):
         self.library : Library  = library #defining types does nothing at runtime, but while wrinting it helps with autocomplete
+        
+        self.number = number
+        self.givenName = givenName
+        self.surname = surname
+
+        self.streetAddress = streetAddress
+        self.zipCode = zipCode
+        self.city = city
+
+        self.emailAddress = emailAddress
+
         self.username : str = username
         self.password : str = password
+
+        self.telephoneNumber = telephoneNumber
     
     def __eq__(self, other): #default equals override
         if isinstance(other, Person):
             return self.username == other.username
         return False
+    
+    def __str__(self): #default to string override
+        return f"{self.username} - {self.library.catalog}"
 
 
     def search_catalog(self, message = f"{colors.YELLOW}Searching in the catalog"):
@@ -23,7 +39,7 @@ class Person:
         if term == "":
             self.check_catalog(0)
         else:
-            self.check_catalog(0, f"{colors.YELLOW}Result search catalog", self.library.catalog.search_books_by("title", term) ,term)
+            self.check_catalog(0, f"{colors.YELLOW}Result search catalog", self.library.catalog.search_books_by("all", term) ,term)
 
     #checkCatalog
     #=================

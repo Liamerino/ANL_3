@@ -27,31 +27,13 @@ def main():
     MyAwesomeLibrary.add_book_item(book1)
     MyAwesomeLibrary.add_book_item(book2, book3, book4, book6, book5, book7, book8, book9, book10, book11, book12)
     clear()
-    #MyAwesomeLibrary.add_book_item(book1)
-    #MyAwesomeLibrary.add_book_item(1)
-    #MyAwesomeLibrary.delete_book_item(MyAwesomeLibrary.bookItems[0])
-    #MyAwesomeLibrary.delete_book_item(MyAwesomeLibrary.bookItems[3])
-    #MyAwesomeLibrary.delete_book_item(BookItem(book2))
-
-    MyEpicPerson1 = Person(MyAwesomeLibrary, "epicPerson", "password123")
-    MyEpicPerson2 = Person(MyAwesomeLibrary, "superPerson", "password321")
-    MyAwesomeLibrary.add_person(MyEpicPerson1,MyEpicPerson2)
     
-    #print("list", MyAwesomeLibrary.persons)
+    
+    #reech1950 - fgr5d4
+    MyAwesomeLibrary.load_members("Members.csv")
     MyAwesomeLibrary.run()
-    #MyEpicPerson.start()
     
-    #MyCoolCatalog = Catalog()
-    #MyCoolCatalog.add_book(book1)
-    #MyCoolCatalog.show_books()
-    #print("--=--")
-    #MyCoolCatalog.edit_book(book1)
-    #MyCoolCatalog.add_book(book1)
-    #MyCoolCatalog.add_book(book2)
-    #MyCoolCatalog.show_books()
-    #print("--=--")
-    #MyCoolCatalog.remove_book(book2)
-    #MyCoolCatalog.show_books()
+    
 
 
 if __name__ == "__main__":
