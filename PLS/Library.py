@@ -34,7 +34,7 @@ class Library:
                     print(f"loading user:{row[0]} {row[7]}")
             print(f'loading users done.')
 
-    def add_member(self, number, givenName, surname,streetAddress, zipCode, city, emailAddress, username, password, telephoneNumber ):
+    def add_member(self, number, givenName, surname,streetAddress, zipCode, city, emailAddress, username, password, telephoneNumber):
         for p in self.members:
             if p.username == username:
                 return

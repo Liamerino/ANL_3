@@ -38,58 +38,26 @@ class Catalog:
         return found
 
 
-    def edit_book(self, book):
-        if not isinstance(book, Book):
-            print(f"[{book}] isn't a book and therefore can't be edited")
-        elif book not in self.books:
-            print(f"[{book}] is not in the catalog")
-        else:
-            print(f"What would you like to edit? Enter the corresponding number to edit:\n[1] Author: {book.author}\n[2] Country: {book.country}\n"
-                  f"[3] Image link: {book.imageLink}\n[4] Language: {book.language}\n[5] Book link: {book.link}\n[6] Amount of pages: {book.pages}\n"
-                  f"[7] Title: {book.title}\n[8] ISBN: {book.ISBN}\n[9] Year of release: {book.year}\nTo go back enter [back]")
-            choice = input()
-            if choice == "1":
-                book.author = input(f"Author:\nCurrently: {book.author}\nNew: ")
+    def edit_book(self, book, item, newValue):
+        if isinstance(book, Book) and book in self.books:
+            if item == "1":
+                book.author = newValue
+            elif item == "2":
+                book.country = newValue
+            elif item == "3":
+                book.imageLink = newValue
+            elif item == "4":
+                book.language = newValue
+            elif item == "5":
+                book.link = newValue
+            elif item == "6":
+                book.pages = newValue
+            elif item == "7":
+                book.title = newValue
+            elif item == "8":
+                book.ISBN = newValue
+            elif item == "9":
+                book.year = newValue
                 self.edit_book(book)
-            elif choice == "2":
-                book.country = input(f"Country:\nCurrently: {book.country}\nNew: ")
-                self.edit_book(book)
-            elif choice == "3":
-                book.imageLink = input(f"Image link:\nCurrently: {book.imageLink}\nNew: ")
-                self.edit_book(book)
-            elif choice == "4":
-                book.language = input(f"Language:\nCurrently: {book.language}\nNew: ")
-                self.edit_book(book)
-            elif choice == "5":
-                book.link = input(f"Book link:\nCurrently: {book.link}\nNew: ")
-                self.edit_book(book)
-            elif choice == "6":
-                while True:
-                    try:
-                        book.pages = int(input(f"Amount of pages:\nCurrently: {book.pages}\nNew: "))
-                    except:
-                        print("The amount of pages needs to be a whole number")
-                    else:
-                        break
-                self.edit_book(book)
-            elif choice == "7":
-                book.title = input(f"Title:\nCurrently: {book.title}\nNew: ")
-                self.edit_book(book)
-            elif choice == "8":
-                book.ISBN = input(f"ISBN:\nCurrently: {book.ISBN}\nNew: ")
-                self.edit_book(book)
-            elif choice == "9":
-                while True:
-                    try:
-                        book.year = int(input(f"Year of release:\nCurrently: {book.year}\nNew: "))
-                    except:
-                        print("The year of release needs to be a whole number")
-                    else:
-                        break
-                self.edit_book(book)
-            elif choice == "back":
-                print("Going back to main or something")
-            else:
-                print("You entered an incorrect input")
-                self.edit_book(book)
+            
 
