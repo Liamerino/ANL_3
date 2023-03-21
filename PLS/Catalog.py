@@ -16,13 +16,8 @@ class Catalog:
             index += 1
 
     def remove_book(self, book):
-        if not isinstance(book, Book):
-            return (False, f"[{book}] isnt a book therefore cant be removed from the catalog.")
-        elif book not in self.books: 
-            return (False, f"[{book.title}] is not in the catalog")
-        else:
+        if isinstance(book, Book) and book in self.books:
             self.books.remove(book)
-            return (True, f"[{book.title}] has been removed from the catalog")
 
     #search book by: "author" || "title" || "all"
     def search_books_by(self, by, term):
@@ -58,6 +53,5 @@ class Catalog:
                 book.ISBN = newValue
             elif item == "9":
                 book.year = newValue
-                self.edit_book(book)
             
 

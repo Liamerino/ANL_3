@@ -1,6 +1,8 @@
 #from Library import Library #this import is not allowed due to circular imports, it only helps with autocomplete while writing in this file
 from Settings import buttons, colors, clear
 
+
+
 class Person:
     def __init__(self, library, number, givenName, surname,streetAddress, zipCode, city, emailAddress, username, password, telephoneNumber ):
         self.library : Library  = library #defining types does nothing at runtime, but while wrinting it helps with autocomplete
@@ -37,7 +39,7 @@ class Person:
         clear() #clearing console to make it better to shee where the i
         print(f"{message}{colors.WHITE}")
         print(f"====================")
-        print(f"{colors.GRAY}Enter nothing to cancle search{colors.WHITE}")
+        print(f"{colors.GRAY}Enter nothing to cancel search{colors.WHITE}")
         print(f"Search on Title or Author:")
         term = input()
         if term == "":
@@ -102,6 +104,17 @@ class Person:
         else:
             self.check_catalog(page, f"{colors.RED}Invalid input, please try again.", booklist, searchTerm )
 
+    ####
+    # USER DETAILS
+    #####
+    def details(self):
+        print(f"{self.givenName} {self.surname}{colors.WHITE}")
+        print(f"====================")
+        print(f"{colors.GRAY}Member number: {colors.WHITE}{self.number}")
+        print(f"{colors.GRAY}Email address: {colors.WHITE}{self.emailAddress}{colors.GRAY}  Phone number: {colors.WHITE}{self.telephoneNumber}")
+        print(f"{self.streetAddress}")
+        print(f"{self.zipCode} {self.city}")
+        print(f"{colors.GRAY}Username: {colors.MAGENTA}{self.username}  {colors.GRAY}Password: {colors.BLUE}{self.password}")
 
 
 
