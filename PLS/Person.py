@@ -95,32 +95,14 @@ class Person:
             else:
                 self.check_catalog(page, f"{colors.RED}There arent any pages before.")
         #if not, then its a invalied input
-        elif x.isdigit():
-            clear()
-            booklist[int(x) - 1 + 9*page].details()
-            input(f"\n{colors.GRAY}Enter anything to go back{colors.WHITE}")
-            self.check_catalog(page)
+        elif x.isdigit() and int(x) < 10 and int(x) >= 0:
+            self.show_book_details(booklist[int(x) - 1 + 9*page], "catalog")
 
         else:
             self.check_catalog(page, f"{colors.RED}Invalid input, please try again.", booklist, searchTerm )
 
-    ####
-    # USER DETAILS
-    #####
-    def details(self):
-        print(f"{self.givenName} {self.surname}{colors.WHITE}")
-        print(f"====================")
-        print(f"{colors.GRAY}Member number: {colors.WHITE}{self.number}")
-        print(f"{colors.GRAY}Email address: {colors.WHITE}{self.emailAddress}{colors.GRAY}  Phone number: {colors.WHITE}{self.telephoneNumber}")
-        print(f"{self.streetAddress}")
-        print(f"{self.zipCode} {self.city}")
-        print(f"{colors.GRAY}Username: {colors.MAGENTA}{self.username}  {colors.GRAY}Password: {colors.BLUE}{self.password}")
 
-
-
-
-
-
+   
 
 
 
@@ -188,15 +170,48 @@ class Person:
             else:
                 self.check_library(page, f"{colors.RED}There arent any pages before.")
         #if not, then its a invalied input
-        elif x.isdigit():
-            clear()
-            booklist[int(x) - 1 + 9*page].details()
-            input(f"\n{colors.GRAY}Enter anything to go back{colors.WHITE}")
-            self.check_library(page)
+        elif x.isdigit()  and int(x) < 10 and int(x) >= 0:
+            self.show_book_details(booklist[int(x) - 1 + 9*page], "library")
 
         else:
             self.check_library(page, f"{colors.RED}Invalid input, please try again.", booklist, searchTerm )
 
+
+
+    ##########################3
+    # BOOK DETAILS
+    ###########################
+
+    #interface has to be "catalog" or "library" (if not it will default to catalog)
+    def show_book_details(self,book, interface = "catalog", message = ""):
+        clear()
+        if message != "" : print(message)
+        book.details()
+        copies = self.library.amount_of_copies(book)
+        print(f"{colors.WHITE}There are{colors.CYAN} {copies} {colors.WHITE} copies of this book in the library")
+        print("")
+        print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back")
+        y = input("What will you do: ").upper()
+        if y == buttons.goBack:
+            if interface == "library":
+                self.check_library(0)
+            else: 
+                self.check_catalog(0)
+        else: self.show_book_details(book,"catalog",f"{colors.RED}Invalid Input{colors.WHITE}")
+
+
+
+    ################
+    # USER DETAILS
+    ################
+    def details(self):
+        print(f"{colors.WHITE}{self.givenName} {self.surname}{colors.WHITE}")
+        print(f"====================")
+        print(f"{colors.GRAY}Member number: {colors.WHITE}{self.number}")
+        print(f"{colors.GRAY}Email address: {colors.WHITE}{self.emailAddress}{colors.GRAY}  Phone number: {colors.WHITE}{self.telephoneNumber}")
+        print(f"{self.streetAddress}")
+        print(f"{self.zipCode} {self.city}")
+        print(f"{colors.GRAY}Username: {colors.MAGENTA}{self.username}  {colors.GRAY}Password: {colors.BLUE}{self.password}")
 
 
 

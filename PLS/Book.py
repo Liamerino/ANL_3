@@ -21,24 +21,10 @@ class Book:
         return f"{self.title} - {self.author}"
     
     def details(self):
-        print(f"{self.title} by{colors.WHITE} {self.author}")
+        print(f"{colors.WHITE}{self.title}{colors.GRAY} by{colors.WHITE} {self.author}")
         print(f"====================")
         print(f"{colors.GRAY}pages:{colors.WHITE} {self.pages}   {colors.GRAY}language:{colors.WHITE} {self.language}")
         print(f"{colors.GRAY}publication country: {self.country}   publication year: {self.year} {colors.WHITE}")
         print(f"{colors.GRAY}image source: {colors.CYAN}{self.imageLink} {colors.WHITE}")
         print(f"{colors.GRAY}book source: {colors.BLUE}{self.link} {colors.WHITE}")
         print(f"{colors.GRAY}ISBN: {colors.WHITE}{self.ISBN}")
-
-
-# the book varables examples taken from the json
-"""
-    "author": "Chinua Achebe",
-    "country": "Nigeria",
-    "imageLink": "images/things-fall-apart.jpg",
-    "language": "English",
-    "link": "https://en.wikipedia.org/wiki/Things_Fall_Apart\n",
-    "pages": 209,
-    "title": "Things Fall Apart",
-    "ISBN": "9781234534597",
-    "year": 1958
-"""

@@ -3,7 +3,7 @@ from Catalog import Catalog
 from BookItem import BookItem
 from Book import Book
 from Person import Person
-from Admin import Admin
+from Member import Member
 import csv
 import json
 import os
@@ -41,7 +41,7 @@ class Library:
             if p.username == username:
                 return
         self.members.append(
-                Person(self, number,givenName, surname,streetAddress, zipCode, city, emailAddress, username, password, telephoneNumber)
+                Member(self, number,givenName, surname,streetAddress, zipCode, city, emailAddress, username, password, telephoneNumber)
         )
 
 
@@ -125,3 +125,12 @@ class Library:
                 return
         self.run(f"{colors.RED}Wrong username or password")
 
+    def amount_of_copies(self, book):
+        if isinstance(book, Book):
+            count = 0
+            for b in self.bookItems:
+                if book.ISBN == b.ISBN: 
+                    count += 1
+            return count
+        else: 
+            return 0

@@ -6,63 +6,25 @@ class Admin(Person):
     def __init__(self, library, number, givenName, surname, streetAddress, zipCode, city, emailAddress,username, password, telephoneNumber):
         Person.__init__(self, library, number, givenName, surname, streetAddress, zipCode, city, emailAddress,username, password, telephoneNumber)
 
-    def check_catalog(self, page, message = f"{colors.YELLOW}Checking the catalog", booklist = "default", searchTerm = ""):
-        clear() #clearing console to make it better to shee where the i
-        print(f"{colors.GRAY}Page {page}{colors.WHITE} | {message}{colors.WHITE}")
-        print(f"====================")
-        print(f"{colors.YELLOW}[{buttons.search}]{colors.WHITE} Search Book {colors.GRAY}{searchTerm}{colors.WHITE} \n") #it will show an option to search a book before showing a list of books inside the catalog
 
-        if booklist == "default":
-            booklist = self.library.catalog.books #getting the catalog booklist from the library
-        index = 1
-        for book in booklist[page*9 : (page+1)*9]: #taking the part of the list thats supose to be displayed (from thispage untill the start of the next page)
-            print(f"[{index}] {book}")
-            index += 1
-        
+    def show_book_details(self,book,interface = "catalog", message = ""):
+        clear()
+        if message != "" : print(message)
+        book.details()
+        copies = self.library.amount_of_copies(book)
+        print(f"{colors.WHITE}There are{colors.CYAN} {copies} {colors.WHITE} copies of this book in the library")
         print("")
-        if len(booklist)-page*9 > 9: #if there are more books with a higher index then shown on the page
-            print(f"{colors.YELLOW}[{buttons.next}]{colors.WHITE} To go to the next page")
-        if page > 0: #if there are more books with a lower index then shown on the page
-            print(f"{colors.YELLOW}[{buttons.previous}]{colors.WHITE} To go to the previous page")
+        print(f"{colors.YELLOW}[{buttons.edit}]{colors.WHITE} Edit book")
         print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back")
-
-        x = input("What will you do: ").upper()
-        #check if the user pressed go back
-        if x == buttons.goBack: 
-            self.start()
-        #check if the user pressed search        
-        elif x == buttons.search:
-            self.search_catalog()
-        #check if the user pressed next
-        elif x == buttons.next:
-            if len(booklist)-page*9 > 9:
-                self.check_catalog(page + 1, f"{colors.YELLOW}Checking the catalog", booklist, searchTerm)
-            else:
-                self.check_catalog(page, f"{colors.RED}There arent any pages afther.")
-        #check if the user pressed previous
-        elif x == buttons.previous:
-            if page > 0:
-                self.check_catalog(page - 1, f"{colors.YELLOW}Checking the catalog", booklist, searchTerm)
-            else:
-                self.check_catalog(page, f"{colors.RED}There arent any pages before.")
-        #if not, then its a invalied input
-        elif x.isdigit():
-            clear()
-            book = booklist[int(x) - 1 + 9*page]
-            book.details()
-            while True:
-                print(f"{colors.YELLOW}[{buttons.edit}]{colors.WHITE} Edit book")
-                print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back")
-                y = input("What will you do: ").upper()
-                if y == buttons.goBack:
-                    self.check_catalog(page)
-                    break
-                elif y == buttons.edit:
-                    self.edit_book(book)
-        else:
-            self.check_catalog(page, f"{colors.RED}Invalid input, please try again.", booklist, searchTerm )
-
-
+        y = input("What will you do: ").upper()
+        if y == buttons.goBack:
+            if interface == "library":
+                self.check_library(0)
+            else: 
+                self.check_catalog(0)
+        elif y == buttons.edit:
+            self.edit_book(book)
+        else: self.show_book_details(book,"catalog",f"{colors.RED}Invalid Input{colors.WHITE}")
     
     def edit_book(self, book, message = f"{colors.YELLOW}Editing book: "):
         clear()
@@ -70,9 +32,15 @@ class Admin(Person):
         print(f"====================")
         #all parts that can be edited
         print(f"{colors.YELLOW}[{buttons.delete}]{colors.WHITE} Delete Book\n")
-        editValues = [("1", "Author", book.author), ("2", "Publication country", book.country), ("3", "Image source", book.imageLink),
-                    ("4", "Language", book.language), ("5", "Book source", book.link), ("6", "Amount of pages", book.pages),
-                    ("7", "Title", book.title), ("8", "ISBN", book.ISBN), ("9", "Publication date", book.year)]
+        editValues = [("1", "Author", book.author), 
+                      ("2", "Publication country", book.country), 
+                      ("3", "Image source", book.imageLink),
+                      ("4", "Language", book.language), 
+                      ("5", "Book source", book.link), 
+                      ("6", "Amount of pages", book.pages),
+                      ("7", "Title", book.title), 
+                      ("8", "ISBN", book.ISBN), 
+                      ("9", "Publication date", book.year)]
         for i in editValues:
             print(f"[{i[0]}] {i[1]}: {i[2]}")
         print("")
@@ -81,7 +49,7 @@ class Admin(Person):
         x = input("What will you do: ").upper()
         #check if the user pressed go back
         if x == buttons.goBack: 
-            pass
+            self.show_book_details(book,"catalog")
         #user chooses what value to edit
         elif x.isdigit():
             intX = int(x) - 1
@@ -101,6 +69,7 @@ class Admin(Person):
             self.edit_book(book, f"{colors.YELLOW}{editValues[intX][1]} edited\nEditing book: ")
         elif x == buttons.delete:
             self.library.catalog.remove_book(book)
+            self.check_catalog(0)
         else:
             self.edit_book(book, f"{colors.RED}Invalid input, please try again\nEditing book: ")
     

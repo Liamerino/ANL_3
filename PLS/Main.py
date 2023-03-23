@@ -7,7 +7,7 @@ def main():
     #admin: Admin - Admin123
     MyAwesomeLibrary.load_books("Books.json")
     MyAwesomeLibrary.load_members("Members.csv")
-    MyAwesomeLibrary.members.append(Admin(MyAwesomeLibrary, 1, "admin", "admin", "library road", "3000 LB", "Rotterdam", "library@gmail.com", "Admin", "Admin123", "0612345678"))
+    MyAwesomeLibrary.members.append(Admin(MyAwesomeLibrary, 0, "admin", "admin", "library road", "3000 LB", "Rotterdam", "library@gmail.com", "Admin", "Admin123", "0612345678"))
     MyAwesomeLibrary.run()
 
 if __name__ == "__main__":
