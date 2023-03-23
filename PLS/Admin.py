@@ -3,8 +3,8 @@ from Settings import buttons, clear, colors
 from Person import Person
 
 class Admin(Person):
-    def __init__(self, library, number, givenName, surname, streetAddress, zipCode, city, emailAddress, telephoneNumber):
-        Person.__init__(self, library, number, givenName, surname, streetAddress, zipCode, city, emailAddress, "Admin", "Admin123", telephoneNumber)
+    def __init__(self, library, number, givenName, surname, streetAddress, zipCode, city, emailAddress,username, password, telephoneNumber):
+        Person.__init__(self, library, number, givenName, surname, streetAddress, zipCode, city, emailAddress,username, password, telephoneNumber)
 
     def check_catalog(self, page, message = f"{colors.YELLOW}Checking the catalog", booklist = "default", searchTerm = ""):
         clear() #clearing console to make it better to shee where the i
