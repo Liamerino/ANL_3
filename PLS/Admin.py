@@ -24,7 +24,7 @@ class Admin(Person):
                 self.check_catalog(0)
         elif y == buttons.edit:
             self.edit_book(book)
-        else: self.show_book_details(book,"catalog",f"{colors.RED}Invalid Input{colors.WHITE}")
+        else: self.show_book_details(book,interface,f"{colors.RED}Invalid Input{colors.WHITE}")
     
     def edit_book(self, book, message = f"{colors.YELLOW}Editing book: "):
         clear()

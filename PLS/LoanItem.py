@@ -3,8 +3,7 @@ from datetime import date
 
 
 class LoanItem(BookItem):
-    def __init__(self, book, loanDate):
-        #self.book = book
+    def __init__(self, book):
         BookItem.__init__(self, book)
         self.loanDate = date.today()
     

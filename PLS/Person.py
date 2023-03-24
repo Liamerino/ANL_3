@@ -197,7 +197,7 @@ class Person:
                 self.check_library(0)
             else: 
                 self.check_catalog(0)
-        else: self.show_book_details(book,"catalog",f"{colors.RED}Invalid Input{colors.WHITE}")
+        else: self.show_book_details(book,interface,f"{colors.RED}Invalid Input{colors.WHITE}")
 
 
 

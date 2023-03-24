@@ -51,7 +51,7 @@ class Library:
 
 
     #####################################
-    # BOOKS
+    # BOOKS  (library)
     #####################################
     def load_books(self, path):
         with open(path, 'r') as f:
@@ -96,9 +96,25 @@ class Library:
                 books.append(b)
         return books
     
+    def amount_of_copies(self, book):
+        if isinstance(book, Book):
+            count = 0
+            for b in self.bookItems:
+                if book.ISBN == b.ISBN: 
+                    count += 1
+            return count
+        else: 
+            return 0
+        
 
+
+
+
+    #####################################
+    # START OF LIBRARY PROGRAM
+    #####################################
     def run(self, message = f"{colors.YELLOW} Log in"):
-        clear() #clearing console to make it better to shee where the i
+        clear() #clearing console
         print(f"{message}{colors.WHITE}")
         print(f"====================")
         print(f"Enter username")
@@ -109,7 +125,7 @@ class Library:
         if un == "":
             self.run(f"{colors.RED}You cant enter nothing")
             return
-        clear() #clearing console to make it better to shee where the i
+        clear() #clearing console
         print(f"{colors.YELLOW}{un}{colors.WHITE}")
         print(f"====================")
         print(f"Enter password")
@@ -119,18 +135,10 @@ class Library:
         if pw == "":
             self.run()
             return
+        
         for user in self.members:
             if user.username.upper() == un.upper() and user.password == pw:
                 user.start()
                 return
+        
         self.run(f"{colors.RED}Wrong username or password")
-
-    def amount_of_copies(self, book):
-        if isinstance(book, Book):
-            count = 0
-            for b in self.bookItems:
-                if book.ISBN == b.ISBN: 
-                    count += 1
-            return count
-        else: 
-            return 0
