@@ -87,7 +87,7 @@ class Person:
             if len(booklist)-page*9 > 9:
                 self.check_catalog(page + 1, f"{colors.YELLOW}Checking the catalog", booklist, searchTerm)
             else:
-                self.check_catalog(page, f"{colors.RED}There arent any pages afther.")
+                self.check_catalog(page, f"{colors.RED}There arent any pages after.")
         #check if the user pressed previous
         elif x == buttons.previous:
             if page > 0:
@@ -96,7 +96,10 @@ class Person:
                 self.check_catalog(page, f"{colors.RED}There arent any pages before.")
         #if not, then its a invalied input
         elif x.isdigit() and int(x) < 10 and int(x) >= 0:
-            self.show_book_details(booklist[int(x) - 1 + 9*page], "catalog")
+            if (int(x) - 1 + 9*page) < len(booklist): 
+                self.show_book_details(booklist[int(x) - 1 + 9*page], "catalog")
+            else:
+                self.check_catalog(page, f"{colors.RED}Invalid input, please try again.", booklist, searchTerm )
 
         else:
             self.check_catalog(page, f"{colors.RED}Invalid input, please try again.", booklist, searchTerm )
@@ -162,7 +165,7 @@ class Person:
             if len(booklist)-page*9 > 9:
                 self.check_library(page + 1, f"{colors.YELLOW}Checking the library", booklist, searchTerm)
             else:
-                self.check_library(page, f"{colors.RED}There arent any pages afther.")
+                self.check_library(page, f"{colors.RED}There arent any pages after.")
         #check if the user pressed previous
         elif x == buttons.previous:
             if page > 0:
@@ -171,7 +174,10 @@ class Person:
                 self.check_library(page, f"{colors.RED}There arent any pages before.")
         #if not, then its a invalied input
         elif x.isdigit()  and int(x) < 10 and int(x) >= 0:
-            self.show_book_details(booklist[int(x) - 1 + 9*page], "library")
+            if (int(x) - 1 + 9*page) < len(booklist):
+                self.show_book_details(booklist[int(x) - 1 + 9*page], "library")
+            else:
+                self.check_library(page, f"{colors.RED}Invalid input, please try again.", booklist, searchTerm )
 
         else:
             self.check_library(page, f"{colors.RED}Invalid input, please try again.", booklist, searchTerm )
@@ -188,9 +194,9 @@ class Person:
         if message != "" : print(message)
         book.details()
         copies = self.library.amount_of_copies(book)
-        print(f"{colors.WHITE}There are{colors.CYAN} {copies} {colors.WHITE} copies of this book in the library")
+        print(f"{colors.WHITE}There are{colors.CYAN} {copies} {colors.WHITE}copies of this book in the library")
         print("")
-        print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back")
+        print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back  {colors.GRAY}({interface}){colors.WHITE}")
         y = input("What will you do: ").upper()
         if y == buttons.goBack:
             if interface == "library":

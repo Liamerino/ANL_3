@@ -13,8 +13,7 @@ class Library:
         self.catalog = Catalog()
         self.members : list[Person] = []     #defining types does nothing at runtime, but while wrinting it helps with autocomplete
         self.bookItems : list[BookItem] = []
-        
-
+    
     #####################################
     # MEMBERS
     #####################################
@@ -35,6 +34,12 @@ class Library:
                     self.add_member(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9])
                     print(f"loading user:{row[0]} {row[7]}")
             print(f'loading users done.')
+        
+        self.members.sort(key=self.sort_by_number)
+    def sort_by_number(self,person):
+        if person.number.isnumeric():
+            return int(person.number)
+        else: return 99999999999999 #if its not a number it will be at the total end of the pages (unless there is something higher then this number, but that probably wont happen)
 
     def add_member(self, number, givenName, surname,streetAddress, zipCode, city, emailAddress, username, password, telephoneNumber):
         for p in self.members:
@@ -43,7 +48,7 @@ class Library:
         self.members.append(
                 Member(self, number,givenName, surname,streetAddress, zipCode, city, emailAddress, username, password, telephoneNumber)
         )
-
+        self.members.sort(key=self.sort_by_number)
 
 
 
@@ -58,30 +63,46 @@ class Library:
             books = json.load(f)
             for book in books:
                 bookToAdd = Book(book["author"], book["country"],book["imageLink"], book["language"], book["link"], book["pages"],book["title"],book["ISBN"], book["year"])
-                bookItemToAdd = BookItem(bookToAdd)
                 if bookToAdd not in self.bookItems:
-                    self.add_book_item(bookItemToAdd,bookItemToAdd,bookItemToAdd,bookItemToAdd,bookItemToAdd)
+                    self.add_book_item(BookItem(bookToAdd),
+                                       BookItem(bookToAdd),
+                                       BookItem(bookToAdd),
+                                       BookItem(bookToAdd),
+                                       BookItem(bookToAdd))
                 else:
-                    self.add_book_item(bookItemToAdd)
+                    self.add_book_item(BookItem(bookToAdd))
 
                 if bookToAdd not in self.catalog.books:
                     self.catalog.add_book(bookToAdd)
+        self.bookItems.sort(key=self.sort_by_title)
+        self.catalog.books.sort(key=self.sort_by_title)
 
     def add_book_item(self, *books):
         for book in books:
             if isinstance(book, BookItem):
                 self.bookItems.append(book)
+                self.bookItems.sort(key=self.sort_by_title)
 
 
     def delete_book_item(self, bookItem):
         if isinstance(bookItem, BookItem):
             if bookItem in self.bookItems:
                 self.bookItems.remove(bookItem)
-                print(f'A copy of [{bookItem}] has been deleted')
-            else:
-                print(f"There are no copies of [{bookItem}] in the library and therefore it can't be deleted")
-        else:
-            print(f"[{bookItem}] is not a book and therefore it can't be deleted")
+                #you dont have to sort a list at removal, it will still be sorten even afther removing a thing
+
+    def sort_by_title(self,book):
+        return book.title
+    
+    # where = "catalog" or "library" or nothing to do both
+    def sort_books(self, where =""):
+        if where == "library":
+            self.bookItems.sort(key=self.sort_by_title)
+        elif where == "catalog":
+            self.catalog.books.sort(key=self.sort_by_title)
+        else: 
+            self.bookItems.sort(key=self.sort_by_title)
+            self.catalog.books.sort(key=self.sort_by_title)
+
     
     #search book by: "author" || "title" || "all"
     def search_books_by(self, by,  term):

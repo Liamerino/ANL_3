@@ -31,27 +31,3 @@ class Catalog:
                 ):
                 found.append(b)
         return found
-
-
-    def edit_book(self, book, item, newValue):
-        if isinstance(book, Book) and book in self.books:
-            if item == "1":
-                book.author = newValue
-            elif item == "2":
-                book.country = newValue
-            elif item == "3":
-                book.imageLink = newValue
-            elif item == "4":
-                book.language = newValue
-            elif item == "5":
-                book.link = newValue
-            elif item == "6":
-                book.pages = newValue
-            elif item == "7":
-                book.title = newValue
-            elif item == "8":
-                book.ISBN = newValue
-            elif item == "9":
-                book.year = newValue
-            
-

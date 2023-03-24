@@ -12,10 +12,10 @@ class Admin(Person):
         if message != "" : print(message)
         book.details()
         copies = self.library.amount_of_copies(book)
-        print(f"{colors.WHITE}There are{colors.CYAN} {copies} {colors.WHITE} copies of this book in the library")
+        print(f"{colors.WHITE}There are{colors.CYAN} {copies} {colors.WHITE}copies of this book in the library")
         print("")
         print(f"{colors.YELLOW}[{buttons.edit}]{colors.WHITE} Edit book")
-        print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back")
+        print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back  {colors.GRAY}({interface}){colors.WHITE}")
         y = input("What will you do: ").upper()
         if y == buttons.goBack:
             if interface == "library":
@@ -23,10 +23,10 @@ class Admin(Person):
             else: 
                 self.check_catalog(0)
         elif y == buttons.edit:
-            self.edit_book(book)
+            self.edit_book(book, interface)
         else: self.show_book_details(book,interface,f"{colors.RED}Invalid Input{colors.WHITE}")
     
-    def edit_book(self, book, message = f"{colors.YELLOW}Editing book: "):
+    def edit_book(self, book, interface = "catalog", message = f"{colors.YELLOW}Editing book: "):
         clear()
         print(f"{message}{book}{colors.WHITE}")
         print(f"====================")
@@ -44,12 +44,12 @@ class Admin(Person):
         for i in editValues:
             print(f"[{i[0]}] {i[1]}: {i[2]}")
         print("")
-        print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back")
+        print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Stop editing")
 
         x = input("What will you do: ").upper()
         #check if the user pressed go back
         if x == buttons.goBack: 
-            self.show_book_details(book,"catalog")
+            self.show_book_details(book,interface)
         #user chooses what value to edit
         elif x.isdigit():
             intX = int(x) - 1
@@ -65,13 +65,36 @@ class Admin(Person):
                     input(f"Enter any key to try again{colors.WHITE}")
                     continue
                 break
-            self.library.catalog.edit_book(book, x, newValue)
-            self.edit_book(book, f"{colors.YELLOW}{editValues[intX][1]} edited\nEditing book: ")
+
+            if x == "1":
+                book.author = newValue
+            elif x == "2":
+                book.country = newValue
+            elif x == "3":
+                book.imageLink = newValue
+            elif x == "4":
+                book.language = newValue
+            elif x == "5":
+                book.link = newValue
+            elif x == "6":
+                book.pages = newValue
+            elif x == "7":
+                book.title = newValue
+            elif x == "8":
+                book.ISBN = newValue
+            elif x == "9":
+                book.year = newValue
+            self.library.sort_books(interface)
+    
+            self.edit_book(book, interface, f"{colors.YELLOW}{editValues[intX][1]} edited\nEditing book: ")
         elif x == buttons.delete:
             self.library.catalog.remove_book(book)
-            self.check_catalog(0)
+            if interface == "library":
+                self.check_library(0)
+            else: 
+                self.check_catalog(0)
         else:
-            self.edit_book(book, f"{colors.RED}Invalid input, please try again\nEditing book: ")
+            self.edit_book(book,interface, f"{colors.RED}Invalid input, please try again\nEditing book: ")
     
     def check_members(self, page, message = f"{colors.YELLOW}Checking the list of members"):
         clear()
@@ -110,9 +133,12 @@ class Admin(Person):
         #check user details
         elif x.isdigit():
             clear()
-            memberList[int(x) - 1 + 9*page].details()
-            input(f"\n{colors.GRAY}Enter anything ot go back{colors.WHITE}")
-            self.check_members(page)
+            if (int(x) - 1 + 9*page) < len(memberList):
+                memberList[int(x) - 1 + 9*page].details()
+                input(f"\n{colors.GRAY}Enter anything to go back{colors.WHITE}")
+                self.check_members(page)
+            else:
+                self.check_members(page, f"{colors.RED}Invalid input, please try again.")
         #invalid input by user
         else:
             self.check_members(page, f"{colors.RED}Invalid input, please try again.")

@@ -8,4 +8,4 @@ class LoanItem(BookItem):
         self.loanDate = date.today()
     
     def days_left(self):
-        return 60 - (self.loanDate - date.today())
+        return 60 - 2   #(self.loanDate - date.today())

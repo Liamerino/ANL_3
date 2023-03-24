@@ -1,6 +1,5 @@
+maxLoanedBooks = 3
 
-
-#universal keys used accros the different interfaces/pages
 class colors:
     WHITE = '\033[97m'
     CYAN = '\033[96m'
