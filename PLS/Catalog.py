@@ -3,7 +3,8 @@ from Book import Book
 class Catalog:
 
     def __init__(self):
-        self.books = []
+        #defining types does nothing at runtime, but while wrinting it helps with autocomplete
+        self.books : list[Book] = []
 
     def add_book(self, book):
         if isinstance(book, Book):

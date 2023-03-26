@@ -1,11 +1,11 @@
 from BookItem import BookItem
-from datetime import date
+import time
 
 
 class LoanItem(BookItem):
-    def __init__(self, book):
+    def __init__(self, book, loanDate = int(time.time()) ):
         BookItem.__init__(self, book)
-        self.loanDate = date.today()
+        self.loanDate = loanDate
     
     def days_left(self):
-        return 60 - 2   #(self.loanDate - date.today())
+        return 60 - int(((((time.time() - self.loanDate)/60)/60)/24)*10)/10

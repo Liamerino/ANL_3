@@ -10,7 +10,7 @@ class colors:
     RED = '\033[91m'
     GRAY = '\033[90m'
 
-class buttons:
+class buttons: #1, 2, 3, 4, 5, 6, 7, 8, 9 are not allowed, those are buttons for a list of items
     goBack = "0"
     previous = "A"
     next= "D"

@@ -7,7 +7,7 @@ from BookItem import BookItem
 class Member(Person):
     def __init__(self, library, number, givenName, surname, streetAddress, zipCode, city, emailAddress,username, password, telephoneNumber):
         Person.__init__(self, library, number, givenName, surname, streetAddress, zipCode, city, emailAddress,username, password, telephoneNumber)
-        self.loaned = []
+        self.loaned : list[LoanItem] = []
 
 
     def loan_book_item(self, book):
@@ -15,10 +15,12 @@ class Member(Person):
             book = BookItem(book)
         self.loaned.append(LoanItem(book))
         self.library.delete_book_item(book)
+        self.library.system_save_members()
 
     def turn_in_loan_item(self, loanedBook):
         self.loaned.remove(loanedBook)
         self.library.add_book_item(BookItem(loanedBook))
+        self.library.system_save_members()
 
 
     def show_book_details(self,book, interface = "catalog", message = ""):

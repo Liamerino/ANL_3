@@ -27,6 +27,11 @@ class Admin(Person):
             self.edit_book(book, interface)
         else: self.show_book_details(book,interface,f"{colors.RED}Invalid Input{colors.WHITE}")
     
+
+
+
+
+
     def edit_book(self, book, interface = "catalog", message = f"{colors.YELLOW}Editing book: "):
         clear()
         print(f"{message}{book}{colors.WHITE}")
@@ -86,17 +91,24 @@ class Admin(Person):
             elif x == "9":
                 book.year = newValue
             self.library.sort_books(interface)
-    
+
             self.edit_book(book, interface, f"{colors.YELLOW}{editValues[intX][1]} edited\nEditing book: ")
         elif x == buttons.delete:
-            self.library.catalog.remove_book(book)
             if interface == "library":
+                self.library.delete_book_item(book)
+                #the library delete function autmaticly saves the file
                 self.check_library(0)
             else: 
+                self.library.catalog.remove_book(book)
+                self.library.system_save_catalog()
                 self.check_catalog(0)
         else:
             self.edit_book(book,interface, f"{colors.RED}Invalid input, please try again\nEditing book: ")
     
+
+
+
+
     def check_members(self, page, message = f"{colors.YELLOW}Checking the list of members"):
         clear()
         print(f"{message}{colors.WHITE}")
@@ -144,6 +156,13 @@ class Admin(Person):
         else:
             self.check_members(page, f"{colors.RED}Invalid input, please try again.")
     
+
+
+
+
+
+
+
     def add_book(self, message = f"{colors.YELLOW}Adding book"):
         clear()
         print(f"{message}{colors.WHITE}")
@@ -163,6 +182,11 @@ class Admin(Person):
         else:
             self.add_book(message = f"{colors.RED}Invalid input, please try again\n{colors.YELLOW}Adding book{colors.WHITE}")
     
+
+
+
+
+
     def add_book_manually(self, bookValues = None, message = f"Adding book manually"):
         clear()
         print(f"{message}{colors.WHITE}")
@@ -204,10 +228,67 @@ class Admin(Person):
             self.library.catalog.add_book(Book(bookValues[1][1], bookValues[2][1], bookValues[3][1],
                                                bookValues[4][1], bookValues[5][1], bookValues[6][1],
                                                bookValues[7][1], bookValues[8][1], bookValues[9][1]))
+            self.library.sort_books("catalog")
+            self.start(f"{colors.GREEN}Book: {bookValues[7][1]} has been added")
         else:
             self.add_book_manually(bookValues, f"{colors.RED}Invalid input, please try again.\n{colors.WHITE}Adding book manually")
         
 
+
+
+
+    def check_backups(self, page, message = f"{colors.YELLOW}Checking backups"):
+        clear() #clearing console to make it better to shee where the i
+        print(f"{colors.GRAY}Page {page}{colors.WHITE} | {message}{colors.WHITE}")
+        print(f"====================")
+      
+        backups = self.library.get_backups() #getting the catalog booklist from the library
+        print(f"{colors.YELLOW}[{buttons.search}]{colors.WHITE} create backup")
+        if len(backups): print(f"Enter one of the numbers to load that backup\n")
+        else: print(f"{colors.RED}There are no backups{colors.WHITE}\n")
+
+        index = 1
+        for bup in backups[page*9 : (page+1)*9]: #taking the part of the list thats supose to be displayed (from thispage untill the start of the next page)
+            print(f"{colors.YELLOW}[{index}]{colors.WHITE} {bup}")
+            index += 1
+        
+        print("")
+        if len(backups)-page*9 > 9: #if there are more books with a higher index then shown on the page
+            print(f"{colors.YELLOW}[{buttons.next}]{colors.WHITE} To go to the next page")
+        if page > 0: #if there are more books with a lower index then shown on the page
+            print(f"{colors.YELLOW}[{buttons.previous}]{colors.WHITE} To go to the previous page")
+        print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back")
+
+        x = input("What will you do: ").upper()
+        #check if the user pressed go back
+        if x == buttons.search: 
+            self.library.make_backup()
+            self.check_backups(0, f"{colors.GREEN}backup made")
+        if x == buttons.goBack: 
+            self.start()
+        #check if the user pressed next
+        elif x == buttons.next:
+            if len(backups)-page*9 > 9:
+                self.check_backups(page + 1)
+            else:
+                self.check_backups(page, f"{colors.RED}There arent any pages after.")
+        #check if the user pressed previous
+        elif x == buttons.previous:
+            if page > 0:
+                self.check_backups(page - 1)
+            else:
+                self.check_backups(page, f"{colors.RED}There arent any pages before.")
+        #if not, then its a invalied input
+
+        elif x.isdigit() and int(x) < 10 and int(x) >= 0:
+            if (int(x) - 1 + 9*page) < len(backups):
+                msg = self.library.load_backup(f"/{backups[int(x) - 1 + 9*page]}")
+                self.check_backups(page, msg)
+            else: 
+                self.check_backups(page, f"{colors.RED}Invalid input, please try again.")
+
+        else:
+            self.check_backups(page, f"{colors.RED}Invalid input, please try again.")
 
 
 
@@ -219,8 +300,9 @@ class Admin(Person):
         print(f"[1] Check Catalog")
         print(f"[2] Check Library")
         print(f"[3] Check members")
-        print(f"[4] Add books\n")
-        print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Log Out")
+        print(f"[4] Add books")
+        print(f"[5] Check Backups")
+        print(f"\n{colors.RED}[{buttons.goBack}]{colors.WHITE} Log Out")
         x = input("What will you do: ")
         if x == buttons.goBack: 
             self.library.run()
@@ -232,5 +314,7 @@ class Admin(Person):
             self.check_members(0)
         elif x == "4":
             self.add_book()
+        elif x == "5":
+            self.check_backups(0)
         else:
             self.start(f"{colors.RED}Invalid input, please try again.")
