@@ -1,4 +1,5 @@
 #from Library import Library
+from Book import Book
 from Settings import buttons, clear, colors
 from Person import Person
 
@@ -143,13 +144,82 @@ class Admin(Person):
         else:
             self.check_members(page, f"{colors.RED}Invalid input, please try again.")
     
+    def add_book(self, message = f"{colors.YELLOW}Adding book"):
+        clear()
+        print(f"{message}{colors.WHITE}")
+        print(f"====================")
+        print(f"[1] Add a book manually\n[2] Load a list of books\n")
+        print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE}Go back to home page")
+                   
+        x = input("What will you do: ").upper()
+        #check if the user pressed go back
+        if x == buttons.goBack:
+            self.start()
+        #adding a book manually
+        elif x == "1":
+            self.add_book_manually()
+        elif x == "2":
+            pass
+        else:
+            self.add_book(message = f"{colors.RED}Invalid input, please try again\n{colors.YELLOW}Adding book{colors.WHITE}")
+    
+    def add_book_manually(self, bookValues = None, message = f"Adding book manually"):
+        clear()
+        print(f"{message}{colors.WHITE}")
+        print(f"====================")
+        if bookValues == None:
+            nameList = ["Author", "Publication country", "Image source",
+                        "Language", "Book source", "Amount of pages",
+                        "Title", "ISBN", "Publication date"]
+            bookValues = {i: (name, None) for (i, name) in zip(range(1, 10), nameList)}
+        for i, value in bookValues.items():
+            if value[1] == None:
+                print(f"[{i}] {value[0]}: {colors.RED}{value[1]}{colors.WHITE}")
+            else:
+                print(f"[{i}] {value[0]}: {value[1]}")
+        print("")
+        if None not in [x[1] for x in bookValues.values()]:
+            print(f"{colors.YELLOW}[{buttons.next}]{colors.WHITE}Add book to catalog")
+        print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE}Go back")
+
+        x = input("What will you do: ").upper()
+        if x == buttons.goBack:
+            self.add_book()
+        elif x == "6" or x == "9":
+            clear()
+            x = int(x)
+            newValue = input(f"{colors.WHITE}Editing {colors.BLUE}{bookValues[x][0]}{colors.WHITE}\n")
+            if not newValue.isdigit():
+                self.add_book_manually(bookValues, f"{colors.RED}Invalid input, please try again.\n{colors.WHITE}Adding book manually")
+            else:
+                bookValues[x] = (bookValues[x][0], newValue)
+                self.add_book_manually(bookValues, f"{colors.BLUE}{bookValues[x][0]}{colors.WHITE} edited\nAdding book manually")
+        elif x.isdigit():
+            if int(x) in bookValues.keys():
+                clear()
+                x = int(x)
+                bookValues[x] = (bookValues[x][0], input(f"{colors.WHITE}Editing {colors.BLUE}{bookValues[x][0]}{colors.WHITE}\n"))
+                self.add_book_manually(bookValues, f"{colors.BLUE}{bookValues[x][0]}{colors.WHITE} edited\nAdding book manually")
+        elif x == buttons.next and None not in [x[1] for x in bookValues.values()]:
+            self.library.catalog.add_book(Book(bookValues[1][1], bookValues[2][1], bookValues[3][1],
+                                               bookValues[4][1], bookValues[5][1], bookValues[6][1],
+                                               bookValues[7][1], bookValues[8][1], bookValues[9][1]))
+        else:
+            self.add_book_manually(bookValues, f"{colors.RED}Invalid input, please try again.\n{colors.WHITE}Adding book manually")
+        
+
+
+
+
+
     def start(self, message = f"{colors.YELLOW}Home Page"):
         clear()
         print(f"{message}{colors.WHITE}")
         print(f"====================")
         print(f"[1] Check Catalog")
         print(f"[2] Check Library")
-        print(f"[3] Check members\n")
+        print(f"[3] Check members")
+        print(f"[4] Add books\n")
         print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Log Out")
         x = input("What will you do: ")
         if x == buttons.goBack: 
@@ -160,5 +230,7 @@ class Admin(Person):
             self.check_library(0)
         elif x == "3":
             self.check_members(0)
+        elif x == "4":
+            self.add_book()
         else:
             self.start(f"{colors.RED}Invalid input, please try again.")

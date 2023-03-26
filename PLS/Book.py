@@ -12,6 +12,7 @@ class Book:
         self.ISBN = ISBN
         self.year = year
     
+    
     def __eq__(self, other): #default equals override
         if isinstance(other, Book):
             return self.title == other.title and self.author == other.author and self.ISBN == self.ISBN
