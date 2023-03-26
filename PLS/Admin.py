@@ -16,6 +16,7 @@ class Admin(Person):
         print(f"{colors.WHITE}There are{colors.CYAN} {copies} {colors.WHITE}copies of this book in the library")
         print("")
         print(f"{colors.YELLOW}[{buttons.edit}]{colors.WHITE} Edit book")
+        print(f"{colors.GREEN}[{buttons.next}]{colors.WHITE} Add copies to library")
         print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back  {colors.GRAY}({interface}){colors.WHITE}")
         y = input("What will you do: ").upper()
         if y == buttons.goBack:
@@ -25,6 +26,8 @@ class Admin(Person):
                 self.check_catalog(0)
         elif y == buttons.edit:
             self.edit_book(book, interface)
+        elif y == buttons.next:
+            self.add_copies(book, interface)
         else: self.show_book_details(book,interface,f"{colors.RED}Invalid Input{colors.WHITE}")
     
 
@@ -233,7 +236,25 @@ class Admin(Person):
         else:
             self.add_book_manually(bookValues, f"{colors.RED}Invalid input, please try again.\n{colors.WHITE}Adding book manually")
         
-
+    def add_copies(self, book, interface, message = f"Adding copies of "):
+        clear()
+        print(f"{colors.YELLOW}{message}{book}{colors.WHITE}")
+        print(f"====================")
+        print(f"{colors.BLUE}How many copies would you like to add. Please enter the amount")
+        print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back\n")
+        
+        x = input("What will you do: ")
+        if x == buttons.goBack:
+            self.show_book_details(book, interface)
+        elif x.isdigit():
+            list = [(book,) for i in range(int(x))]
+            books = ()
+            for i in list:
+                books += i
+            self.library.add_book_item(books)
+            self.show_book_details(book, interface, message = f"{colors.YELLOW}{x} copies of {book} added{colors.WHITE}")
+        else:
+            self.add_copies(self, book, interface, message = f"{colors.RED}Invalid input, please try again.{colors.WHITE}\n Adding copies of ")
 
 
 
