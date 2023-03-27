@@ -30,7 +30,7 @@ class Member(Person):
         copies = self.library.amount_of_copies(book)
         print(f"{colors.WHITE}There are{colors.CYAN} {copies} {colors.WHITE}copies of this book in the library")
         print("")
-        if copies: print(f"{colors.YELLOW}[{buttons.search}]{colors.WHITE} Loan a coppy")
+        if copies: print(f"{colors.YELLOW}[{buttons.search}]{colors.WHITE} Loan a copy")
         else: print(f"{colors.GRAY} There are no copies, therefore you cant loan this book {colors.WHITE}")
         print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back  {colors.GRAY}({interface}){colors.WHITE}")
         y = input("What will you do: ").upper()

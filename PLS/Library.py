@@ -272,6 +272,11 @@ class Library:
                 self.members.remove(member)
                 self.system_save_members()
 
+    def find_members(self, searchTerm):
+        searchTerm = searchTerm.upper()
+        return [member for member in self.members if member.surname.upper() == searchTerm or member.number.upper() == searchTerm or member.username.upper() == searchTerm]
+    
+
     #####################################
     # BOOKS  (library)
     #####################################

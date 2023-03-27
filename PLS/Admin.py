@@ -16,6 +16,7 @@ class Admin(Person):
         copies = self.library.amount_of_copies(book)
         print(f"{colors.WHITE}There are{colors.CYAN} {copies} {colors.WHITE}copies of this book in the library")
         print("")
+        print(f"{colors.BLUE}[{buttons.search}]{colors.WHITE} Lend book")
         print(f"{colors.YELLOW}[{buttons.edit}]{colors.WHITE} Edit book")
         print(f"{colors.GREEN}[{buttons.next}]{colors.WHITE} Add copies to library")
         print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back  {colors.GRAY}({interface}){colors.WHITE}")
@@ -29,11 +30,41 @@ class Admin(Person):
             self.edit_book(book, interface)
         elif y == buttons.next:
             self.add_copies(book, interface)
+        elif y == buttons.search:
+            self.lend_book_item(book, interface)
         else: self.show_book_details(book,interface,f"{colors.RED}Invalid Input{colors.WHITE}")
     
-
-
-
+    def lend_book_item(self, book, interface, message = f"{colors.YELLOW}Lending ", memberList = []):
+        clear()
+        print(f"{message}{colors.CYAN}{book}{colors.WHITE}")
+        print(f"====================")
+        print(f"{colors.YELLOW}[{buttons.search}]{colors.WHITE} Search for a member to lend book to\n")
+        if memberList != []:
+            print(f"{colors.WHITE}Choose member to lend {colors.CYAN}{book}{colors.WHITE} to")
+            for i in range(len(memberList)): print(f"[{i+1}] {memberList[i]}")
+        print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back")
+        
+        x = input("What will you do: ").upper()
+        if x == buttons.goBack:
+            self.show_book_details(book, interface)
+        elif x == buttons.search:
+            clear()
+            print(f"{colors.BLUE}Search for a member with username, member ID or last name{colors.WHITE}\n")
+            members = self.library.find_members(input())
+            if members == []:
+                self.lend_book_item(book, interface, f"{colors.RED}No members found with that searchterm\n{colors.YELLOW}Lending ")
+            else:
+                self.lend_book_item(book, interface, f"{colors.CYAN}{len(members)}{colors.GREEN} members found\n{colors.YELLOW}Lending ", members)
+        elif x.isdigit():
+            x = int(x) - 1
+            if x >= 0 and x < len(memberList):
+                member = memberList[x]
+                member.loan_book_item(book)
+                self.show_book_details(book, interface, f"{colors.CYAN}{book}{colors.GREEN} successfully lent to {colors.CYAN}{member}{colors.WHITE}")
+            else:
+                self.lend_book_item(book, interface, f"{colors.RED}Invalid input, please try again\n{colors.YELLOW}Lending ")
+        else:
+            self.lend_book_item(book, interface, f"{colors.RED}Invalid input, please try again\n{colors.YELLOW}Lending ")
 
 
     def edit_book(self, book, interface = "catalog", message = f"{colors.YELLOW}Editing book: "):
