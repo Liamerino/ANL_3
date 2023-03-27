@@ -229,7 +229,7 @@ class Admin(Person):
         elif x == "1":
             self.add_member_manually()
         elif x =="2":
-            pass
+            self.add_list_members()
         else:
             self.add_member(message = f"{colors.RED}Invalid input, please try again\n{colors.YELLOW}Adding member(s){colors.WHITE}")
 
@@ -270,7 +270,34 @@ class Admin(Person):
         else:
             self.add_member_manually(memberValues, message = f"{colors.RED}Invalid input, please try again\n{colors.YELLOW}Adding member manually")
 
-            
+    def add_list_members(self, message = f"{colors.YELLOW}Adding list of members with CSV{colors.WHITE}"):
+        clear()
+        print(f"{message}{colors.WHITE}")
+        print(f"====================")
+        print(f"[1] Use standard directory at path {colors.CYAN}{get_path()}\n{colors.WHITE}[2] Provide a path to file\n")
+        print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back")
+
+        x = input("What will you do: ").upper()
+        if x == buttons.goBack:
+            self.add_member()
+        elif x == "1":
+            clear()
+            fileName = input(f"{colors.BLUE}What is the file name?\n{colors.WHITE}")
+            try:
+                self.library.load_members(f"{get_path()}\{fileName}")
+                self.add_list_members(f"{colors.GREEN}Members added successfully\n{colors.YELLOW}Adding list of members with CSV")
+            except:
+                self.add_list_members(f"{colors.RED}No such file exists, please try again\n{colors.YELLOW}Adding list of members with CSV")
+        elif x == "2":
+            clear()
+            path = input(f"{colors.BLUE}Please provide a path to the CSV file you'd like to load{colors.WHITE}\n")
+            try:
+                self.library.load_members(f"{path}")
+                self.add_list_members(f"{colors.GREEN}Members added successfully\n{colors.YELLOW}Adding list of members with CSV")
+            except:
+                self.add_list_members(f"{colors.RED}No such path and file exist, please try again\n{colors.YELLOW}Adding list of books with CSV")
+        else:
+            self.add_list_members(f"{colors.RED}Invalid input, please try again\n{colors.YELLOW}Adding list of books with CSV")
 
 
     def add_book(self, message = f"{colors.YELLOW}Adding book"):
@@ -319,7 +346,8 @@ class Admin(Person):
                 self.add_list_books(f"{colors.GREEN}Books added successfully\n{colors.YELLOW}Adding list of books with JSON")
             except:        
                 self.add_list_books(f"{colors.RED}No such path and file exist, please try again\n{colors.YELLOW}Adding list of books with JSON")
-
+        else:
+            self.add_list_books(f"{colors.RED}Invalid input, please try again\n{colors.YELLOW}Adding list of books with JSON")
 
     def add_book_manually(self, bookValues = None, message = f"Adding book manually"):
         clear()
