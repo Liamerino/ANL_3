@@ -1,7 +1,8 @@
-#from Library import Library
+from Library import Library
 from Book import Book
 from Settings import buttons, clear, colors
 from Person import Person
+from Member import Member
 
 class Admin(Person):
     def __init__(self, library, number, givenName, surname, streetAddress, zipCode, city, emailAddress,username, password, telephoneNumber):
@@ -159,11 +160,55 @@ class Admin(Person):
         else:
             self.check_members(page, f"{colors.RED}Invalid input, please try again.")
     
+    def add_member(self, message = f"{colors.YELLOW}Adding member(s)"):
+        clear()
+        print(f"{message}{colors.WHITE}")
+        print(f"====================")
+        print(f"[1] Add a member manually\n[2] Load a list of members\n")
+        print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE}")
 
+        x = input("What will you do: ").upper()
+        if x == buttons.goBack:
+            self.start()
+        elif x == "1":
+            pass
+        elif x =="2":
+            pass
+        else:
+            self.add_member(message = f"{colors.RED}Invalid input, please try again\n{colors.YELLOW}Adding member(s){colors.WHITE}")
 
+    def add_member_manually(self, memberValues = None, message = f"{colors.YELLOW}Adding member manually"):
+        print(f"{message}{colors.WHITE}")
+        print(f"====================")
+        if memberValues == None:
+            valueList = ["First name", "Last name", "Street address",
+                         "Zip code", "City", "Email address",
+                         "Username", "Password", "Phone number"]
+            memberValues = {i: (value, None) for (i, value) in zip(range(1, 10), valueList)}
+        for i, value in memberValues.items():
+            if value[1] == None:
+                print(f"[{i}] {value[0]}: {colors.RED}{value[1]}{colors.WHITE}")
+            else:
+                print(f"[{i}] {value[0]}: {value[1]}")
+        print("")
+        if None not in [x[1] for x in memberValues.values()]:
+            print(f"{colors.GREEN}[{buttons.next}]{colors.WHITE} Add member to library")
+        print(f"{colors.RED}{buttons.goBack}{colors.WHITE} Go back")
 
+        x = input("What will you do: ").upper()
+        if x == buttons.goBack:
+            self.add_member()
+        elif x.isdigit() and int(x) in memberValues.keys():
+            clear()
+            x = int(x)
+            memberValues[x] = (memberValues[x][0], input(f"{colors.WHITE}Editing {colors.BLUE}{memberValues[x][0]}{colors.WHITE}\n"))
+            self.add_member_manually(memberValues, message = f"{colors.BLUE}{memberValues[x][0]}{colors.WHITE} edited\n{colors.YELLOW}Adding member manually{colors.WHITE}")
+        #elif x == buttons.next and None not in [x[1] for x in memberValues.values()]:
+        #    self.library.add_member()
+        else:
+            self.add_member_manually(memberValues, message = f"{colors.RED}Invalid input, please try again\n{colors.YELLOW}Adding member manually")
 
-
+            
 
 
     def add_book(self, message = f"{colors.YELLOW}Adding book"):
@@ -186,7 +231,8 @@ class Admin(Person):
             self.add_book(message = f"{colors.RED}Invalid input, please try again\n{colors.YELLOW}Adding book{colors.WHITE}")
     
 
-
+    def add_list_books(self, message = f"Adding list of books"):
+        print(f"{colors.YELLOW}Adding list of books with ")
 
 
 
@@ -206,8 +252,8 @@ class Admin(Person):
                 print(f"[{i}] {value[0]}: {value[1]}")
         print("")
         if None not in [x[1] for x in bookValues.values()]:
-            print(f"{colors.YELLOW}[{buttons.next}]{colors.WHITE}Add book to catalog")
-        print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE}Go back")
+            print(f"{colors.GREEN}[{buttons.next}]{colors.WHITE} Add book to catalog")
+        print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back")
 
         x = input("What will you do: ").upper()
         if x == buttons.goBack:
@@ -255,7 +301,6 @@ class Admin(Person):
             self.show_book_details(book, interface, message = f"{colors.YELLOW}{x} copies of {book} added{colors.WHITE}")
         else:
             self.add_copies(self, book, interface, message = f"{colors.RED}Invalid input, please try again.{colors.WHITE}\n Adding copies of ")
-
 
 
     def check_backups(self, page, message = f"{colors.YELLOW}Checking backups"):

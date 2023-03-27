@@ -294,7 +294,9 @@ class Library:
         for book in books:
             if isinstance(book, BookItem):
                 self.bookItems.append(book)
-                self.sort_books("library")
+            if isinstance(book, Book):
+                self.bookItems.append(BookItem(book))
+        self.sort_books("library")
 
 
     def delete_book_item(self, bookItem):
