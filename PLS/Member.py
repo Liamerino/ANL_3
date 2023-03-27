@@ -6,7 +6,7 @@ from BookItem import BookItem
 
 class Member(Person):
     def __init__(self, library, number, givenName, surname, streetAddress, zipCode, city, emailAddress,username, password, telephoneNumber):
-        Person.__init__(self, library, number, givenName, surname, streetAddress, zipCode, city, emailAddress,username, password, telephoneNumber)
+        Person.__init__(self, library, number, givenName, surname, streetAddress, zipCode, city, emailAddress, username, password, telephoneNumber)
         self.loaned : list[LoanItem] = []
 
 

@@ -1,6 +1,6 @@
 from Library import Library
 from Book import Book
-from Settings import buttons, clear, colors
+from Settings import buttons, clear, colors, get_path
 from Person import Person
 from Member import Member
 
@@ -110,9 +110,69 @@ class Admin(Person):
             self.edit_book(book,interface, f"{colors.RED}Invalid input, please try again\nEditing book: ")
     
 
+    def show_member_details(self, member, page, message = ""):
+        clear()
+        if message != "" : print(message)
+        member.details()
+        print("")
+        print(f"{colors.GREEN}[{buttons.edit}]{colors.WHITE} Edit member\n{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back")
 
+        x = input("What will you do: ").upper()
+        if x == buttons.goBack:
+            self.check_members(page)
+        elif x == buttons.edit:
+            self.edit_member(member, page)
+        else:
+            self.show_member_details(member, page, f"{colors.RED}Invalid input, please try again.{colors.WHITE}")
 
+    def edit_member(self, member, page, message = f"{colors.WHITE}Editing: "):
+        clear()
+        print(f"{message}{colors.YELLOW}{member}{colors.WHITE}")
+        print(f"====================")
+        print(f"{colors.YELLOW}[{buttons.delete}]{colors.WHITE} Delete member\n")
+        valueList = [("User ID", member.number), ("First name", member.givenName),
+                    ("Last name", member.surname), ("Street address", member.streetAddress),
+                    ("Zip code", member.zipCode), ("City", member.city),
+                    ("Email address", member.emailAddress), ("Username", member.username),
+                    ("Password", self.password), ("Phone number", member.telephoneNumber)]
+        for i in range(len(valueList)):
+            print(f"[{i+1}] {valueList[i][0]}: {valueList[i][1]}")
+        print(f"\n{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back")
 
+        x = input("What will you do: ").upper()
+        if x == buttons.goBack:
+            self.show_member_details(member, page)
+        elif x == buttons.delete:
+            self.library.delete_member(member)
+            self.check_members(page, f"{colors.GREEN}Member successfully deleted.{colors.YELLOW}\nChecking the list of members{colors.WHITE}") 
+        elif x.isdigit():
+            x = int(x) - 1
+            if x >= 0 and x <= 9:
+                self.edit_member_value(member, page, valueList[x][0], valueList[x][1])
+            else:
+                self.edit_member(member, page, f"{colors.RED}Invalid input, please try again.\n{colors.YELLOW}Editing member: ")
+        else:
+            self.edit_member(member, page, f"{colors.RED}Invalid input, please try again.\n{colors.YELLOW}Editing member: ")
+    
+    def edit_member_value(self, member, page, valueType, value):
+        clear()
+        print(f"{colors.YELLOW}Editing: {member}{colors.WHITE}")
+        print(f"====================")
+        print(f"{colors.BLUE}Current {valueType}: {value}{colors.WHITE}")
+        newValue = input(f"New {valueType}: ")
+        if valueType == "User ID": member.number = newValue
+        elif valueType == "First name": member.givenName = newValue
+        elif valueType == "Last name": member.surname = newValue
+        elif valueType == "Street address": member.streetAddress = newValue
+        elif valueType == "Zip code": member.zipCode = newValue
+        elif valueType == "City": member.city = newValue
+        elif valueType == "Email address": member.emailAddress = newValue
+        elif valueType == "Username": member.username = newValue
+        elif valueType == "Password": member.password = newValue
+        elif valueType == "Phone number": member.telephoneNumber = newValue
+        self.edit_member(member, page, f"{colors.GREEN}{valueType} successfully edited\n{colors.YELLOW}Editing member: ")
+
+    
     def check_members(self, page, message = f"{colors.YELLOW}Checking the list of members"):
         clear()
         print(f"{message}{colors.WHITE}")
@@ -149,13 +209,9 @@ class Admin(Person):
                 self.check_members(page, f"{colors.RED}There aren't any pages before.")
         #check user details
         elif x.isdigit():
-            clear()
             if (int(x) - 1 + 9*page) < len(memberList):
-                memberList[int(x) - 1 + 9*page].details()
-                input(f"\n{colors.GRAY}Enter anything to go back{colors.WHITE}")
-                self.check_members(page)
-            else:
-                self.check_members(page, f"{colors.RED}Invalid input, please try again.")
+                self.show_member_details(memberList[int(x) - 1 + 9*page], page)
+            self.check_members(page, f"{colors.RED}Invalid input, please try again.")
         #invalid input by user
         else:
             self.check_members(page, f"{colors.RED}Invalid input, please try again.")
@@ -165,26 +221,28 @@ class Admin(Person):
         print(f"{message}{colors.WHITE}")
         print(f"====================")
         print(f"[1] Add a member manually\n[2] Load a list of members\n")
-        print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE}")
+        print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back")
 
         x = input("What will you do: ").upper()
         if x == buttons.goBack:
             self.start()
         elif x == "1":
-            pass
+            self.add_member_manually()
         elif x =="2":
             pass
         else:
             self.add_member(message = f"{colors.RED}Invalid input, please try again\n{colors.YELLOW}Adding member(s){colors.WHITE}")
 
     def add_member_manually(self, memberValues = None, message = f"{colors.YELLOW}Adding member manually"):
+        clear()
         print(f"{message}{colors.WHITE}")
         print(f"====================")
         if memberValues == None:
-            valueList = ["First name", "Last name", "Street address",
+            valueList = ["User ID", "First name", "Last name", "Street address",
                          "Zip code", "City", "Email address",
                          "Username", "Password", "Phone number"]
-            memberValues = {i: (value, None) for (i, value) in zip(range(1, 10), valueList)}
+            memberValues = {i: (value, None) for (i, value) in zip(range(1, 11), valueList)}
+            memberValues[1] = (memberValues[1][0], self.library.get_user_id())
         for i, value in memberValues.items():
             if value[1] == None:
                 print(f"[{i}] {value[0]}: {colors.RED}{value[1]}{colors.WHITE}")
@@ -193,18 +251,22 @@ class Admin(Person):
         print("")
         if None not in [x[1] for x in memberValues.values()]:
             print(f"{colors.GREEN}[{buttons.next}]{colors.WHITE} Add member to library")
-        print(f"{colors.RED}{buttons.goBack}{colors.WHITE} Go back")
+        print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back")
 
         x = input("What will you do: ").upper()
         if x == buttons.goBack:
             self.add_member()
-        elif x.isdigit() and int(x) in memberValues.keys():
-            clear()
-            x = int(x)
-            memberValues[x] = (memberValues[x][0], input(f"{colors.WHITE}Editing {colors.BLUE}{memberValues[x][0]}{colors.WHITE}\n"))
-            self.add_member_manually(memberValues, message = f"{colors.BLUE}{memberValues[x][0]}{colors.WHITE} edited\n{colors.YELLOW}Adding member manually{colors.WHITE}")
-        #elif x == buttons.next and None not in [x[1] for x in memberValues.values()]:
-        #    self.library.add_member()
+        elif x.isdigit(): 
+            if int(x) in memberValues.keys():
+                clear()
+                x = int(x)
+                memberValues[x] = (memberValues[x][0], input(f"{colors.WHITE}Editing {colors.BLUE}{memberValues[x][0]}{colors.WHITE}\n"))
+                self.add_member_manually(memberValues, message = f"{colors.BLUE}{memberValues[x][0]}{colors.WHITE} edited\n{colors.YELLOW}Adding member manually{colors.WHITE}")
+        elif x == buttons.next and None not in [x[1] for x in memberValues.values()]:
+            self.library.add_member(memberValues[1][1], memberValues[2][1], memberValues[3][1],
+                                    memberValues[4][1], memberValues[5][1], memberValues[6][1],
+                                    memberValues[7][1], memberValues[8][1], memberValues[9][1], memberValues[10][1])
+            self.add_member(message = f"{colors.GREEN}Member successfully added\n{colors.YELLOW}Adding member(s){colors.WHITE}")
         else:
             self.add_member_manually(memberValues, message = f"{colors.RED}Invalid input, please try again\n{colors.YELLOW}Adding member manually")
 
@@ -226,14 +288,37 @@ class Admin(Person):
         elif x == "1":
             self.add_book_manually()
         elif x == "2":
-            pass
+            self.add_list_books()
         else:
             self.add_book(message = f"{colors.RED}Invalid input, please try again\n{colors.YELLOW}Adding book{colors.WHITE}")
     
 
-    def add_list_books(self, message = f"Adding list of books"):
-        print(f"{colors.YELLOW}Adding list of books with ")
+    def add_list_books(self, message = f"Adding list of books with JSON"):
+        clear()
+        print(f"{colors.YELLOW}{message}{colors.WHITE}")
+        print(f"====================")
+        print(f"[1] Use standard directory at path {colors.CYAN}{get_path()}\n{colors.WHITE}[2] Provide a path to file\n")
+        print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back")
 
+        x = input("What will you do: ").upper()
+        if x == buttons.goBack:
+            self.add_book()
+        elif x == "1":
+            clear()
+            fileName = input(f"{colors.BLUE}What is the file name?\n{colors.WHITE}")
+            try:
+                self.library.load_books(f"{get_path()}\{fileName}")
+                self.add_list_books(f"{colors.GREEN}Books added successfully\n{colors.YELLOW}Adding list of books with JSON")
+            except:
+                self.add_list_books(f"{colors.RED}No such file exists, please try again\n{colors.YELLOW}Adding list of books with JSON")
+        elif x =="2":
+            clear()
+            path = input(f"{colors.BLUE}Please provide a path to the JSON file you'd like to load\n{colors.WHITE}")
+            try:
+                self.library.load_books(f"{path}")
+                self.add_list_books(f"{colors.GREEN}Books added successfully\n{colors.YELLOW}Adding list of books with JSON")
+            except:        
+                self.add_list_books(f"{colors.RED}No such path and file exist, please try again\n{colors.YELLOW}Adding list of books with JSON")
 
 
     def add_book_manually(self, bookValues = None, message = f"Adding book manually"):
@@ -289,7 +374,7 @@ class Admin(Person):
         print(f"{colors.BLUE}How many copies would you like to add. Please enter the amount")
         print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back\n")
         
-        x = input("What will you do: ")
+        x = input("What will you do: ").upper()
         if x == buttons.goBack:
             self.show_book_details(book, interface)
         elif x.isdigit():
@@ -346,12 +431,13 @@ class Admin(Person):
                 self.check_backups(page, f"{colors.RED}There arent any pages before.")
         #if not, then its a invalied input
 
-        elif x.isdigit() and int(x) < 10 and int(x) >= 0:
-            if (int(x) - 1 + 9*page) < len(backups):
-                msg = self.library.load_backup(f"/{backups[int(x) - 1 + 9*page]}")
-                self.check_backups(page, msg)
-            else: 
-                self.check_backups(page, f"{colors.RED}Invalid input, please try again.")
+        elif x.isdigit(): 
+            if int(x) < 10 and int(x) >= 0:
+                if (int(x) - 1 + 9*page) < len(backups):
+                    msg = self.library.load_backup(f"/{backups[int(x) - 1 + 9*page]}")
+                    self.check_backups(page, msg)
+                else: 
+                    self.check_backups(page, f"{colors.RED}Invalid input, please try again.")
 
         else:
             self.check_backups(page, f"{colors.RED}Invalid input, please try again.")
@@ -365,9 +451,10 @@ class Admin(Person):
         print(f"====================")
         print(f"[1] Check Catalog")
         print(f"[2] Check Library")
-        print(f"[3] Check members")
-        print(f"[4] Add books")
-        print(f"[5] Check Backups")
+        print(f"[3] Check Members")
+        print(f"[4] Add Books")
+        print(f"[5] Add Members")
+        print(f"[6] Check Backups")
         print(f"\n{colors.RED}[{buttons.goBack}]{colors.WHITE} Log Out")
         x = input("What will you do: ")
         if x == buttons.goBack: 
@@ -381,6 +468,8 @@ class Admin(Person):
         elif x == "4":
             self.add_book()
         elif x == "5":
+            self.add_member()
+        elif x == "6":
             self.check_backups(0)
         else:
             self.start(f"{colors.RED}Invalid input, please try again.")

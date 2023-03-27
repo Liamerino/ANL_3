@@ -131,7 +131,7 @@ class Library:
                     "EmailAddress" :m.emailAddress,
                     "Username" :m.username,
                     "Password" :m.password,
-                    "TelephoneNumber" : m.password,
+                    "TelephoneNumber" : m.telephoneNumber,
                     "loaned" : loanedBooks
                 })
         json_data = json.dumps(data, indent=2)
@@ -263,8 +263,14 @@ class Library:
         self.members.sort(key=self.sort_by_number)
         self.system_save_members()
 
-
-
+    def get_user_id(self):
+        return str(max([int(x.number) for x in self.members]) + 1)
+        
+    def delete_member(self, member):
+        if isinstance(member, Member):
+            if member in self.members:
+                self.members.remove(member)
+                self.system_save_members()
 
     #####################################
     # BOOKS  (library)
