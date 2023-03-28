@@ -365,7 +365,7 @@ class Library:
     #####################################
     # START OF LIBRARY PROGRAM
     #####################################
-    def run(self, message = f"{colors.YELLOW} Log in"):
+    def run(self, message = f"{colors.YELLOW}Log in"):
         clear() #clearing console
         print(f"{message}{colors.WHITE}")
         print(f"====================")

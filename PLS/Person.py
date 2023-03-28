@@ -55,7 +55,7 @@ class Person:
     #    ?  message > a message thats beeing displayed above this interface (like all other interfaces)
     #    ?  booklist > the list of books that should be displayed (when "default" it will just get the list from the library)
     #    ?  searchTerm > term that is used when searchiing a book
-    def check_catalog(self, page, message = f"{colors.YELLOW}Checking the catalog", booklist = "default", searchTerm = ""):
+    def check_catalog(self, page, message = f"{colors.YELLOW}Viewing the catalog", booklist = "default", searchTerm = ""):
         clear() #clearing console to make it better to shee where the i
         print(f"{colors.GRAY}Page {page}{colors.WHITE} | {message}{colors.WHITE}")
         print(f"====================")
@@ -85,13 +85,13 @@ class Person:
         #check if the user pressed next
         elif x == buttons.next:
             if len(booklist)-page*9 > 9:
-                self.check_catalog(page + 1, f"{colors.YELLOW}Checking the catalog", booklist, searchTerm)
+                self.check_catalog(page + 1, f"{colors.YELLOW}Viewing the catalog", booklist, searchTerm)
             else:
                 self.check_catalog(page, f"{colors.RED}There arent any pages after.")
         #check if the user pressed previous
         elif x == buttons.previous:
             if page > 0:
-                self.check_catalog(page - 1, f"{colors.YELLOW}Checking the catalog", booklist, searchTerm)
+                self.check_catalog(page - 1, f"{colors.YELLOW}Viewing the catalog", booklist, searchTerm)
             else:
                 self.check_catalog(page, f"{colors.RED}There arent any pages before.")
         #if not, then its a invalied input
@@ -133,7 +133,7 @@ class Person:
     #    ?  message > a message thats beeing displayed above this interface (like all other interfaces)
     #    ?  booklist > the list of books that should be displayed (when "default" it will just get the list from the library)
     #    ?  searchTerm > term that is used when searchiing a book
-    def check_library(self, page, message = f"{colors.YELLOW}Checking the library", booklist = "default", searchTerm = ""):
+    def check_library(self, page, message = f"{colors.YELLOW}Viewing the library", booklist = "default", searchTerm = ""):
         clear() #clearing console to make it better to shee where the i
         print(f"{colors.GRAY}Page {page}{colors.WHITE} | {message}{colors.WHITE}")
         print(f"====================")
@@ -163,13 +163,13 @@ class Person:
         #check if the user pressed next
         elif x == buttons.next:
             if len(booklist)-page*9 > 9:
-                self.check_library(page + 1, f"{colors.YELLOW}Checking the library", booklist, searchTerm)
+                self.check_library(page + 1, f"{colors.YELLOW}Viewing the library", booklist, searchTerm)
             else:
                 self.check_library(page, f"{colors.RED}There arent any pages after.")
         #check if the user pressed previous
         elif x == buttons.previous:
             if page > 0:
-                self.check_library(page - 1, f"{colors.YELLOW}Checking the library", booklist, searchTerm)
+                self.check_library(page - 1, f"{colors.YELLOW}Viewing the library", booklist, searchTerm)
             else:
                 self.check_library(page, f"{colors.RED}There arent any pages before.")
         #if not, then its a invalied input
@@ -236,8 +236,8 @@ class Person:
         clear()
         print(f"{message}{colors.WHITE}")
         print(f"====================")
-        print(f"[1] Check Catalog")
-        print(f"[2] Check Library\n")
+        print(f"[1] Viewing Catalog")
+        print(f"[2] Viewing Library\n")
         print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Log Out")
         x = input("What will you do: ")
         if x == buttons.goBack: 

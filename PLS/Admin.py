@@ -42,6 +42,7 @@ class Admin(Person):
         if memberList != []:
             print(f"{colors.WHITE}Choose member to lend {colors.CYAN}{book}{colors.WHITE} to")
             for i in range(len(memberList)): print(f"[{i+1}] {memberList[i]}")
+        print("")
         print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back")
         
         x = input("What will you do: ").upper()
@@ -204,7 +205,7 @@ class Admin(Person):
         self.edit_member(member, page, f"{colors.GREEN}{valueType} successfully edited\n{colors.YELLOW}Editing member: ")
 
     
-    def check_members(self, page, message = f"{colors.YELLOW}Checking the list of members"):
+    def check_members(self, page, message = f"{colors.YELLOW}Viewing the list of members"):
         clear()
         print(f"{message}{colors.WHITE}")
         print(f"====================")
@@ -229,13 +230,13 @@ class Admin(Person):
         #check if the user pressed next
         elif x == buttons.next:
             if len(memberList)-page*9 > 9:
-                self.check_members(page + 1, f"{colors.YELLOW}Checking the list of members")
+                self.check_members(page + 1, f"{colors.YELLOW}Viewing the list of members")
             else:
                 self.check_members(page, f"{colors.RED}There arent any pages after.")
         #check if the user pressed previous
         elif x == buttons.previous:
             if page > 0:
-                self.check_members(page - 1, f"{colors.YELLOW}Checking the list of members")
+                self.check_members(page - 1, f"{colors.YELLOW}Viewing the list of members")
             else:
                 self.check_members(page, f"{colors.RED}There aren't any pages before.")
         #check user details
@@ -508,12 +509,12 @@ class Admin(Person):
         clear()
         print(f"{message}{colors.WHITE}")
         print(f"====================")
-        print(f"[1] Check Catalog")
-        print(f"[2] Check Library")
-        print(f"[3] Check Members")
+        print(f"[1] View Catalog")
+        print(f"[2] View Library")
+        print(f"[3] View Members")
         print(f"[4] Add Books")
         print(f"[5] Add Members")
-        print(f"[6] Check Backups")
+        print(f"[6] View Backups")
         print(f"\n{colors.RED}[{buttons.goBack}]{colors.WHITE} Log Out")
         x = input("What will you do: ")
         if x == buttons.goBack: 

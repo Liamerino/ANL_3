@@ -56,7 +56,7 @@ class Member(Person):
     #by defailt the maximum pages are 3, so pages are not needed at all.
     #they are only here because we already made them in for example the catalog, 
     # it was an easy coppy now it is really easy for a potential library manager to resise the amount of loanable books
-    def check_loaned_books(self, page, message = f"{colors.YELLOW}Checking your loaned books"):
+    def check_loaned_books(self, page, message = f"{colors.YELLOW}Viewing your loaned books"):
         clear() #clearing console to make it better to shee where the i
         print(f"{colors.GRAY}Page {page}{colors.WHITE} | {message}{colors.WHITE}")
         print(f"====================")
@@ -113,9 +113,9 @@ class Member(Person):
         clear()
         print(f"{message}{colors.WHITE}")
         print(f"====================")
-        print(f"[1] Check Catalog")
-        print(f"[2] Check Library")
-        print(f"[3] Check Loaned Books\n")
+        print(f"[1] View Catalog")
+        print(f"[2] View Library")
+        print(f"[3] View Loaned Books\n")
         print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Log Out")
         x = input("What will you do: ")
         if x == buttons.goBack: 
