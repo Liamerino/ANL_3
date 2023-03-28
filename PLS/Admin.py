@@ -73,7 +73,8 @@ class Admin(Person):
         print(f"{message}{book}{colors.WHITE}")
         print(f"====================")
         #all parts that can be edited
-        print(f"{colors.YELLOW}[{buttons.delete}]{colors.WHITE} Delete Book\n")
+        if interface == "catalog": print(f"{colors.YELLOW}[{buttons.delete}]{colors.WHITE} Delete Book\n")
+        else: print(f"{colors.YELLOW}[{buttons.delete}]{colors.WHITE} Delete Copy of Book\n")
         editValues = [("1", "Author", book.author), 
                       ("2", "Publication country", book.country), 
                       ("3", "Image source", book.imageLink),
@@ -423,7 +424,7 @@ class Admin(Person):
                                                bookValues[4][1], bookValues[5][1], bookValues[6][1],
                                                bookValues[7][1], bookValues[8][1], bookValues[9][1]))
             self.library.sort_books("catalog")
-            self.start(f"{colors.GREEN}Book: {bookValues[7][1]} has been added")
+            self.add_book(f"{colors.GREEN}Book: {bookValues[7][1]} has been added")
         else:
             self.add_book_manually(bookValues, f"{colors.RED}Invalid input, please try again.\n{colors.WHITE}Adding book manually")
         
@@ -448,7 +449,7 @@ class Admin(Person):
             self.add_copies(self, book, interface, message = f"{colors.RED}Invalid input, please try again.{colors.WHITE}\n Adding copies of ")
 
 
-    def check_backups(self, page, message = f"{colors.YELLOW}Checking backups"):
+    def check_backups(self, page, message = f"{colors.YELLOW}Viewing backups"):
         clear() #clearing console to make it better to shee where the i
         print(f"{colors.GRAY}Page {page}{colors.WHITE} | {message}{colors.WHITE}")
         print(f"====================")
