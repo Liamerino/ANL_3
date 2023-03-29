@@ -143,7 +143,7 @@ class Admin(Person):
             self.edit_book(book,interface, f"{colors.RED}Invalid input, please try again\nEditing book: ")
     
 
-    def show_member_details(self, member, page, message = ""):
+    def show_member_details(self, member, page=0, message = ""):
         clear()
         if message != "" : print(message)
         member.details()
@@ -158,7 +158,7 @@ class Admin(Person):
         else:
             self.show_member_details(member, page, f"{colors.RED}Invalid input, please try again.{colors.WHITE}")
 
-    def edit_member(self, member, page, message = f"{colors.WHITE}Editing: "):
+    def edit_member(self, member, page=0, message = f"{colors.WHITE}Editing: "):
         clear()
         print(f"{message}{colors.YELLOW}{member}{colors.WHITE}")
         print(f"====================")
