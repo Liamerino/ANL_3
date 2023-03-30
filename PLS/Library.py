@@ -240,8 +240,9 @@ class Library:
                     firstline = False
                 else:
                    if len(row) == 10:
-                    self.add_member(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9])
-                    print(f"loading user:{row[0]} {row[7]}")
+                    l = self.add_member(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9])
+                    if l: print(f"loading user:{row[0]} {row[7]}")
+                    else: print(f"user:{row[0]} {row[7]} already exist")
             print(f'loading users done.')
         
         self.members.sort(key=self.sort_by_number)
@@ -256,12 +257,13 @@ class Library:
     def add_member(self, number, givenName, surname,streetAddress, zipCode, city, emailAddress, username, password, telephoneNumber):
         for p in self.members:
             if p.username == username:
-                return
+                return False
         self.members.append(
                 Member(self, number,givenName, surname,streetAddress, zipCode, city, emailAddress, username, password, telephoneNumber)
         )
         self.members.sort(key=self.sort_by_number)
         self.system_save_members()
+        return True
 
     def get_user_id(self):
         return str(max([int(x.number) for x in self.members]) + 1)
