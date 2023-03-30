@@ -1,8 +1,9 @@
 from Library import Library
 from Book import Book
-from Settings import buttons, clear, colors, get_path
+from Settings import buttons, clear, colors
 from Person import Person
 from Member import Member
+import os
 
 class Admin(Person):
     def __init__(self, library, number, givenName, surname, streetAddress, zipCode, city, emailAddress,username, password, telephoneNumber):
@@ -307,28 +308,18 @@ class Admin(Person):
         clear()
         print(f"{message}{colors.WHITE}")
         print(f"====================")
-        print(f"[1] Use standard directory at path {colors.CYAN}{get_path()}\n{colors.WHITE}[2] Provide a path to file\n")
+        #print(f"[1] Use standard directory at path {colors.CYAN}{get_path()}\n{colors.WHITE}[2] Provide a path to file\n")
+        print(f"Provide a full path to file\n")
         print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back")
 
-        x = input("What will you do: ").upper()
+        x = input("Enter the path or 0: ").upper()
         if x == buttons.goBack:
             self.add_member()
-        elif x == "1":
-            clear()
-            fileName = input(f"{colors.BLUE}What is the file name?\n{colors.WHITE}")
-            try:
-                self.library.load_members(f"{get_path()}\{fileName}")
-                self.add_list_members(f"{colors.GREEN}Members added successfully\n{colors.YELLOW}Adding list of members with CSV")
-            except:
-                self.add_list_members(f"{colors.RED}No such file exists, please try again\n{colors.YELLOW}Adding list of members with CSV")
-        elif x == "2":
-            clear()
-            path = input(f"{colors.BLUE}Please provide a path to the CSV file you'd like to load{colors.WHITE}\n")
-            try:
-                self.library.load_members(f"{path}")
-                self.add_list_members(f"{colors.GREEN}Members added successfully\n{colors.YELLOW}Adding list of members with CSV")
-            except:
-                self.add_list_members(f"{colors.RED}No such path and file exist, please try again\n{colors.YELLOW}Adding list of books with CSV")
+        elif os.path.exists(x):
+            print()
+            self.library.load_members(x)
+            input(f"{colors.GRAY}Enter anything to go back {colors.WHITE}")
+            self.add_member()
         else:
             self.add_list_members(f"{colors.RED}Invalid input, please try again\n{colors.YELLOW}Adding list of books with CSV")
 
@@ -338,7 +329,7 @@ class Admin(Person):
         print(f"{message}{colors.WHITE}")
         print(f"====================")
         print(f"[1] Add a book manually\n[2] Load a list of books\n")
-        print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE}Go back to home page")
+        print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back to home page")
                    
         x = input("What will you do: ").upper()
         #check if the user pressed go back
@@ -357,28 +348,18 @@ class Admin(Person):
         clear()
         print(f"{colors.YELLOW}{message}{colors.WHITE}")
         print(f"====================")
-        print(f"[1] Use standard directory at path {colors.CYAN}{get_path()}\n{colors.WHITE}[2] Provide a path to file\n")
+        #print(f"[1] Use standard directory at path {colors.CYAN}{os.path.dirname(__file__)}{colors.WHITE}")
+        print(f"Provide a full path to file\n")
         print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back")
 
-        x = input("What will you do: ").upper()
+        x = input("Enter the path or 0: ").upper()
         if x == buttons.goBack:
             self.add_book()
-        elif x == "1":
-            clear()
-            fileName = input(f"{colors.BLUE}What is the file name?\n{colors.WHITE}")
-            try:
-                self.library.load_books(f"{get_path()}\{fileName}")
-                self.add_list_books(f"{colors.GREEN}Books added successfully\n{colors.YELLOW}Adding list of books with JSON")
-            except:
-                self.add_list_books(f"{colors.RED}No such file exists, please try again\n{colors.YELLOW}Adding list of books with JSON")
-        elif x =="2":
-            clear()
-            path = input(f"{colors.BLUE}Please provide a path to the JSON file you'd like to load\n{colors.WHITE}")
-            try:
-                self.library.load_books(f"{path}")
-                self.add_list_books(f"{colors.GREEN}Books added successfully\n{colors.YELLOW}Adding list of books with JSON")
-            except:        
-                self.add_list_books(f"{colors.RED}No such path and file exist, please try again\n{colors.YELLOW}Adding list of books with JSON")
+        elif os.path.exists(x):
+            print()
+            self.library.load_books(x)
+            input(f"{colors.GRAY}Enter anything to go back {colors.WHITE}")
+            self.add_book()
         else:
             self.add_list_books(f"{colors.RED}Invalid input, please try again\n{colors.YELLOW}Adding list of books with JSON")
 

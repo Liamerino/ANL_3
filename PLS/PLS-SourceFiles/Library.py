@@ -13,12 +13,14 @@ import shutil
 
 
 class Library:
-    def __init__(self, systemPath = "PLS-System"):
-        self.systemPath = systemPath
+    def __init__(self):
+        print("making library")
+        self.sourcePath = f"PLS-SourceFiles"
+        self.systemPath = f"{self.sourcePath}/PLS-System"
         self.catalogPath = f"/catalog.json"
         self.libraryPath = f"/library.json"
         self.membersPath = f"/members.json"
-        self.backupFolderPath = f"{systemPath}/PLS-Backups"
+        self.backupFolderPath = f"{self.systemPath}/PLS-Backups"
 
         self.catalog = Catalog()
         #defining types does nothing at runtime, but while wrinting it helps with autocomplete
@@ -30,17 +32,17 @@ class Library:
     #####################################
     # SYSTEM MANAGMENT
     #####################################
-    def initialize(self, pathBooks = "Books.json", pathMembers = "Members.csv"):
+    def initialize(self):
         self.system_ceckPath()
 
         if not (os.path.exists(f"{self.systemPath}{self.catalogPath}") and os.path.exists(f"{self.systemPath}{self.libraryPath}")):
-            self.load_books(pathBooks)
+            self.load_books(f"{self.sourcePath}/Books.json", True)
         else:
             self.load_system_library()
             self.load_system_catalog()
 
         if not os.path.exists(f"{self.systemPath}{self.membersPath}"):
-            self.load_members(pathMembers)
+            self.load_members(f"{self.sourcePath}/Members.csv")
         else:
             self.load_system_members()
 
@@ -227,23 +229,27 @@ class Library:
     # MEMBERS
     #####################################
     def load_members(self, path):
-        if not os.getcwd() in os.path.abspath(path):
-            print("cant load, file not the correct directory")
+        if not os.path.exists(path):
+            print(f"{colors.RED}cant load, file not the correct directory{colors.WHITE}")
+            print(f"{colors.GRAY}{path} is an invallid file path\n{colors.WHITE}")
             return
         
-        with open(path, 'r') as csv_file:
-            csv_reader = csv.reader(csv_file, delimiter=';')
-            firstline = True
-            for row in csv_reader:
-                if firstline:
-                    #print(f'Column names are {", ".join(row)}')
-                    firstline = False
-                else:
-                   if len(row) == 10:
-                    l = self.add_member(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9])
-                    if l: print(f"loading user:{row[0]} {row[7]}")
-                    else: print(f"user:{row[0]} {row[7]} already exist")
-            print(f'loading users done.')
+        try:
+            with open(path, 'r') as csv_file:
+                csv_reader = csv.reader(csv_file, delimiter=';')
+                firstline = True
+                for row in csv_reader:
+                    if firstline:
+                        #print(f'Column names are {", ".join(row)}')
+                        firstline = False
+                    else:
+                       if len(row) == 10:
+                        l = self.add_member(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9])
+                        if l: print(f"{colors.GRAY}Loading user:{colors.WHITE} {row[0]} {row[7]}")
+                        else: print(f"{colors.RED}User:{row[0]} {row[7]} already exist{colors.WHITE}")
+                print(f'{colors.GREEN}Loading users done.{colors.WHITE}')
+        except:
+            print(f"{colors.RED}could not load, invalled formatted file{colors.WHITE}")
         
         self.members.sort(key=self.sort_by_number)
         self.system_save_members()
@@ -282,31 +288,40 @@ class Library:
     #####################################
     # BOOKS  (library)
     #####################################
-    def load_books(self, path):
+    def load_books(self, path, initialze = False):
         if not os.path.exists(path):
+            print(f"{colors.RED}cant load, file not the correct directory{colors.WHITE}")
+            print(f"{colors.GRAY}{path} is an invallid file path\n{colors.WHITE}")
             return
 
-        with open(path, 'r') as f:
-            books = json.load(f)
-            for book in books:
-                bookToAdd = Book(book["author"], book["country"],book["imageLink"], book["language"], book["link"], book["pages"],book["title"],book["ISBN"], book["year"])
-                if bookToAdd not in self.bookItems:
-                    self.add_book_item(BookItem(bookToAdd),
-                                       BookItem(bookToAdd),
-                                       BookItem(bookToAdd),
-                                       BookItem(bookToAdd),
-                                       BookItem(bookToAdd))
-                else:
-                    self.add_book_item(BookItem(bookToAdd))
+        try:
+            with open(path, 'r') as f:
+                books = json.load(f)
+                for book in books:
+                    text = f"{colors.GREEN}"
+                    bookToAdd = Book(book["author"], book["country"],book["imageLink"], book["language"], book["link"], book["pages"],book["title"],book["ISBN"], book["year"])
+                    if bookToAdd not in self.bookItems and initialze:
+                        self.add_book_item(BookItem(bookToAdd),
+                                           BookItem(bookToAdd),
+                                           BookItem(bookToAdd),
+                                           BookItem(bookToAdd),
+                                           BookItem(bookToAdd))
+                        text += f'+5 copies: {colors.WHITE}{bookToAdd.title}'
+                    else:
+                        self.add_book_item(BookItem(bookToAdd))
+                        text += f'+1 copie: {colors.WHITE}{bookToAdd.title}'
 
-                if bookToAdd not in self.catalog.books:
-                    self.catalog.add_book(bookToAdd)
-        self.sort_books()
+                    if bookToAdd not in self.catalog.books:
+                        self.catalog.add_book(bookToAdd)
+                        text += f' | {colors.YELLOW}new in catalog{colors.WHITE}'
+                    print(text)
+            self.sort_books()
+            print(f"{colors.GREEN}Loading books done.{colors.WHITE}")
+        except:
+            print(f"{colors.RED}could not load, invalled formatted file{colors.WHITE}")
 
     def add_book_item(self, *books):
         for book in books:
-            if isinstance(book, BookItem):
-                self.bookItems.append(book)
             if isinstance(book, Book):
                 self.bookItems.append(BookItem(book))
         self.sort_books("library")

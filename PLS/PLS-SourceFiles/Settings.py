@@ -23,8 +23,3 @@ class buttons: #1, 2, 3, 4, 5, 6, 7, 8, 9 are not allowed, those are buttons for
 
 def clear():#making space in the console so people understand what is relevant
     print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-
-def get_path():
-    absolute = os.path.dirname(__file__)
-    relative = "..\load_directory"
-    return os.path.join(absolute, relative)
