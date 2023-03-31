@@ -9,7 +9,7 @@ def main():
     #member: othed1997 - urmhhh
     #admin: admin - Admin123
     MyAwesomeLibrary.initialize()
-    MyAwesomeLibrary.members.append(Admin(MyAwesomeLibrary, "0", "admin", "admin", "library road", "3000 LB", "Rotterdam", "library@gmail.com", "admin", "Admin123", "0612345678"))
+    MyAwesomeLibrary.members.append(Admin(MyAwesomeLibrary, "0", "admin", "admin", "library road", "3000 LB", "Rotterdam", "library@gmail.com", "admin", "admin123", "0612345678"))
     MyAwesomeLibrary.run()
 
 if __name__ == "__main__":

@@ -309,7 +309,7 @@ class Library:
                         text += f'+5 copies: {colors.WHITE}{bookToAdd.title}'
                     else:
                         self.add_book_item(BookItem(bookToAdd))
-                        text += f'+1 copie: {colors.WHITE}{bookToAdd.title}'
+                        text += f'+1 copy: {colors.WHITE}{bookToAdd.title}'
 
                     if bookToAdd not in self.catalog.books:
                         self.catalog.add_book(bookToAdd)
@@ -318,7 +318,7 @@ class Library:
             self.sort_books()
             print(f"{colors.GREEN}Loading books done.{colors.WHITE}")
         except:
-            print(f"{colors.RED}could not load, invalled formatted file{colors.WHITE}")
+            print(f"{colors.RED}could not load, invalid formatted file{colors.WHITE}")
 
     def add_book_item(self, *books):
         for book in books:

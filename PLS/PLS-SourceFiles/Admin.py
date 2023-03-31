@@ -170,7 +170,10 @@ class Admin(Person):
                     ("Email address", member.emailAddress), ("Username", member.username),
                     ("Password", self.password), ("Phone number", member.telephoneNumber)]
         for i in range(len(valueList)):
-            print(f"[{i+1}] {valueList[i][0]}: {valueList[i][1]}")
+            if i == 9:
+                print(f"[S] {valueList[i][0]}: {valueList[i][1]}")
+            else:
+                print(f"[{i+1}] {valueList[i][0]}: {valueList[i][1]}")
         print(f"\n{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back")
 
         x = input("What will you do: ").upper()
