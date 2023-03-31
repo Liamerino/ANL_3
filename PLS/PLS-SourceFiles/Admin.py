@@ -292,8 +292,13 @@ class Admin(Person):
             memberValues = {i: (value, None) for (i, value) in zip(range(1, 11), valueList)}
             memberValues[1] = (memberValues[1][0], self.library.get_user_id())
         for i, value in memberValues.items():
-            if value[1] == None:
-                print(f"[{i}] {value[0]}: {colors.RED}{value[1]}{colors.WHITE}")
+            if value[i][1] == None:
+                if i == 10:
+                    print(f"[S] {value[0]}: {colors.RED}{value[1]}{colors.WHITE}")
+                else: 
+                    print(f"[{i}] {value[0]}: {colors.RED}{value[1]}{colors.WHITE}")
+            elif i == 10:
+                print(f"[s] {value[0]}: {value[1]}")
             else:
                 print(f"[{i}] {value[0]}: {value[1]}")
         print("")
