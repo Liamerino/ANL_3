@@ -28,15 +28,19 @@ class Member(Person):
         if message != "" : print(message)
         book.details()
         copies = self.library.amount_of_copies(book)
+        alreadyHave = book in self.loaned
         print(f"{colors.WHITE}There are{colors.CYAN} {copies} {colors.WHITE}copies of this book in the library")
         print("")
-        if copies: print(f"{colors.YELLOW}[{buttons.search}]{colors.WHITE} Loan a copy")
+        if alreadyHave: print(f"{colors.GRAY}You already have this book loaned {colors.WHITE}")
+        elif copies: print(f"{colors.YELLOW}[{buttons.search}]{colors.WHITE} Loan a copy")
         else: print(f"{colors.GRAY} There are no copies, therefore you cant loan this book {colors.WHITE}")
         print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back  {colors.GRAY}({interface}){colors.WHITE}")
         y = input("What will you do: ").upper()
         if y == buttons.search:
             if not copies:
                 self.show_book_details(book,interface,f"{colors.RED}No copies left{colors.WHITE}")
+            elif alreadyHave:
+                self.show_book_details(book,interface,f"{colors.RED}You already have this book{colors.WHITE}")
             elif len(self.loaned) >= maxLoanedBooks:
                 self.show_book_details(book,interface,f"{colors.RED}You are on the maximum loaned books{colors.WHITE}")
             else: 
@@ -109,7 +113,7 @@ class Member(Person):
             self.check_loaned_books(page, f"{colors.RED}Invalid input, please try again.")
 
 
- ################
+    ################
     # USER DETAILS
     ################
     def details(self):

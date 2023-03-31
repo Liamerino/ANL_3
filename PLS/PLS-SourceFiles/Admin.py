@@ -1,6 +1,6 @@
 from Library import Library
 from Book import Book
-from Settings import buttons, clear, colors
+from Settings import buttons, clear, colors, maxLoanedBooks
 from Person import Person
 from Member import Member
 import os
@@ -42,7 +42,13 @@ class Admin(Person):
         print(f"{colors.YELLOW}[{buttons.search}]{colors.WHITE} Search for a member to lend book to\n")
         if memberList != []:
             print(f"{colors.WHITE}Choose member to lend {colors.CYAN}{book}{colors.WHITE} to")
-            for i in range(len(memberList)): print(f"[{i+1}] {memberList[i]}")
+            for i in range(len(memberList)): 
+                if isinstance(memberList[i],Member):
+                    alreadyHave = book in memberList[i].loaned
+                    extra =""
+                    if alreadyHave:
+                        extra = f"{colors.RED} allready loaned this book"
+                    print(f"[{i+1}] {memberList[i]} {colors.GRAY}[{len(memberList[i].loaned)}/{maxLoanedBooks}] {extra}{colors.WHITE}")
         print("")
         print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back")
         
@@ -61,8 +67,13 @@ class Admin(Person):
             x = int(x) - 1
             if x >= 0 and x < len(memberList):
                 member = memberList[x]
-                member.loan_book_item(book)
-                self.show_book_details(book, interface, f"{colors.CYAN}{book}{colors.GREEN} successfully lent to {colors.CYAN}{member}{colors.WHITE}")
+                if not isinstance(member, Member):
+                    self.show_book_details(book, interface, f"{colors.RED}something went wront trying to loan to {colors.CYAN}{member}{colors.WHITE}")
+                elif book in member.loaned:
+                    self.show_book_details(book, interface, f"{colors.CYAN}{member}{colors.RED} already loaned this book {colors.WHITE}")
+                else: 
+                    member.loan_book_item(book)
+                    self.show_book_details(book, interface, f"{colors.CYAN}{book}{colors.GREEN} successfully lent to {colors.CYAN}{member}{colors.WHITE}")
             else:
                 self.lend_book_item(book, interface, f"{colors.RED}Invalid input, please try again\n{colors.YELLOW}Lending ")
         else:
