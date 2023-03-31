@@ -1,6 +1,5 @@
-import os
-maxLoanedBooks = 3
 
+maxLoanedBooks = 3
 
 class colors:
     WHITE = '\033[97m'
@@ -19,7 +18,6 @@ class buttons: #1, 2, 3, 4, 5, 6, 7, 8, 9 are not allowed, those are buttons for
     delete = "X"
     edit= "E"
     search = "S"
-
 
 def clear():#making space in the console so people understand what is relevant
     print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
