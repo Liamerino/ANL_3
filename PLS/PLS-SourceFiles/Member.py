@@ -109,6 +109,28 @@ class Member(Person):
             self.check_loaned_books(page, f"{colors.RED}Invalid input, please try again.")
 
 
+ ################
+    # USER DETAILS
+    ################
+    def details(self):
+        print(f"{colors.WHITE}{self.givenName} {self.surname}{colors.WHITE}")
+        print(f"====================")
+        print(f"{colors.GRAY}Member number: {colors.WHITE}{self.number}")
+        print(f"{colors.GRAY}Email address: {colors.WHITE}{self.emailAddress}{colors.GRAY}  Phone number: {colors.WHITE}{self.telephoneNumber}")
+        print(f"{self.streetAddress}")
+        print(f"{self.zipCode} {self.city}")
+        print(f"{colors.GRAY}Username: {colors.MAGENTA}{self.username}  {colors.GRAY}Password: {colors.BLUE}{self.password} {colors.WHITE} ")
+        print(f"loaned books: {colors.GRAY}[{colors.WHITE}{len(self.loaned)}{colors.GRAY}/{colors.WHITE}{maxLoanedBooks}{colors.GRAY}]{colors.WHITE}")
+        for b in self.loaned:
+            daysLeft = b.days_left()
+            extraText = f"{colors.YELLOW}{daysLeft} days left"
+            if daysLeft < 0:
+                extraText = f"{colors.RED}{daysLeft} to late"
+            print(f"- {b} | {extraText}{colors.WHITE}")
+
+
+
+
     def start(self, message = f"{colors.YELLOW}Home Page"):
         clear()
         print(f"{message}{colors.WHITE}")
