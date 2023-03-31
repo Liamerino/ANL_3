@@ -434,14 +434,11 @@ class Admin(Person):
         if x == buttons.goBack:
             self.show_book_details(book, interface)
         elif x.isdigit():
-            list = [(book,) for i in range(int(x))]
-            books = ()
-            for i in list:
-                books += i
-            self.library.add_book_item(books)
-            self.show_book_details(book, interface, message = f"{colors.YELLOW}{x} copies of {book} added{colors.WHITE}")
+            for i in range(int(x)):
+                self.library.add_book_item(book)
+            self.show_book_details(book, interface, f"{colors.YELLOW}{x} copies of {book} added{colors.WHITE}")
         else:
-            self.add_copies(self, book, interface, message = f"{colors.RED}Invalid input, please try again.{colors.WHITE}\n Adding copies of ")
+            self.add_copies(book, interface, f"{colors.RED}Invalid input, please try again.{colors.WHITE}\n Adding copies of ")
 
 
     def check_backups(self, page, message = f"{colors.YELLOW}Viewing backups"):

@@ -9,12 +9,6 @@ class Catalog:
     def add_book(self, book):
         if isinstance(book, Book):
             self.books.append(book)
-    
-    def show_books(self):
-        index = 1
-        for b in self.books:
-            print( f"[{index}] {b}" )
-            index += 1
 
     def remove_book(self, book):
         if isinstance(book, Book) and book in self.books:
