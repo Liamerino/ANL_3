@@ -47,7 +47,7 @@ class Admin(Person):
                     alreadyHave = book in memberList[i].loaned
                     extra =""
                     if alreadyHave:
-                        extra = f"{colors.RED} allready loaned this book"
+                        extra = f"{colors.RED} already loaned this book"
                     print(f"[{i+1}] {memberList[i]} {colors.GRAY}[{len(memberList[i].loaned)}/{maxLoanedBooks}] {extra}{colors.WHITE}")
         print("")
         print(f"{colors.RED}[{buttons.goBack}]{colors.WHITE} Go back")
@@ -218,6 +218,7 @@ class Admin(Person):
         elif valueType == "Username": member.username = newValue
         elif valueType == "Password": member.password = newValue
         elif valueType == "Phone number": member.telephoneNumber = newValue
+        self.library.system_save_members()
         self.edit_member(member, page, f"{colors.GREEN}{valueType} successfully edited\n{colors.YELLOW}Editing member: ")
 
     
